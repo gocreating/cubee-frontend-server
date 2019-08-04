@@ -1,15 +1,19 @@
+import path from 'path';
 import App from './App';
 import React from 'react';
 import { StaticRouter } from 'react-router-dom';
 import express from 'express';
 import { renderToString } from 'react-dom/server';
 
+const isProduction = (process.env.NODE_ENV === 'production');
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
 const server = express();
 server
   .disable('x-powered-by')
-  .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
+  // hack to serve production asset server in docker container
+  // ref: <https://github.com/jaredpalmer/razzle/issues/389>
+  .use(express.static(isProduction ? path.join(__dirname, '../build/public') : process.env.RAZZLE_PUBLIC_DIR))
   .get('/*', (req, res) => {
     const context = {};
     const markup = renderToString(
