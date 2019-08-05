@@ -1,0 +1,9 @@
+version: '3'
+services:
+  frontend-server:
+    build: .
+    ports:
+      # external port: internal port
+      - "3000:3000"
+    entrypoint: yarn
+    command: "start:prod"

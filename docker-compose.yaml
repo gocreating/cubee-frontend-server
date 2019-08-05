@@ -1,0 +1,12 @@
+version: '3'
+services:
+  frontend-server:
+    build: .
+    ports:
+      # external port: internal port
+      - "3000:3000"
+      - "3001:3001"
+    volumes:
+      - .:/srv/cubee-frontend-server
+    entrypoint: yarn
+    command: "start"
