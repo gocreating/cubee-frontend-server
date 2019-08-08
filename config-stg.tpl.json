@@ -1,0 +1,4 @@
+{
+  "secretFoo": "this is secret foo for staging",
+  "secretBar": "this is secret bar for staging"
+}

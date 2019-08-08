@@ -15,6 +15,9 @@ COPY . /srv/cubee-frontend-server
 
 WORKDIR /srv/cubee-frontend-server
 
+RUN yarn global add razzle && \
+    yarn build
+
 ENV repoName=${PROJECT_REPONAME} \
     commitSHA1=${SHA1} \
     buildDate=${BUILD_DATE} \

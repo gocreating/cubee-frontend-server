@@ -7,6 +7,7 @@ import { Capture } from 'react-loadable';
 import { getBundles } from 'react-loadable/webpack';
 import App from './App';
 import stats from '../build/react-loadable.json';
+import config from './config';
 
 const isProduction = (process.env.NODE_ENV === 'production');
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
@@ -21,6 +22,15 @@ server.get('/info', (req, res) => {
     imageTag: process.env.imageTag,
   });
 });
+
+server.get('/config', (req, res) => {
+  res.json({
+    subdomains: req.subdomains,
+    foo: config.secretFoo,
+    bar: config.secretBar,
+  });
+});
+
 server
   .disable('x-powered-by')
   // hack to serve production asset server in docker container

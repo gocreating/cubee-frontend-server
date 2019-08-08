@@ -7,6 +7,8 @@ services:
       - "3000:3000"
       - "3001:3001"
     volumes:
-      - .:/srv/cubee-frontend-server
+      - ./node_modules:/srv/cubee-frontend-server/node_modules
+      - ./src:/srv/cubee-frontend-server/src
+      - ./config-stg.json:/etc/config.json
     entrypoint: yarn
     command: "start"

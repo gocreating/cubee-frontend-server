@@ -21,7 +21,6 @@ $ docker-volume-watcher
 ### prod in container
 
 ``` bash
-$ yarn run build
 $ docker-compose -f ./docker-compose-prod.yaml up --build
 ```
 
@@ -29,5 +28,20 @@ $ docker-compose -f ./docker-compose-prod.yaml up --build
 
 ``` bash
 $ yarn run build
-$ yarn start:prod # may fail to set environment variables on windows
+$ CONFIG_PATH="./config-stg.json" NODE_ENV=production node build/server.js
+```
+
+## Encryption/Decryption Sensitive File with Ansible-Vault
+
+``` bash
+$ docker run -it --rm -v c:/projects/cubee/cubee-frontend-server/helm-chart/cubee-frontend-server:/ansible gocreating/ansible-vault encrypt ./configMap-prod.yaml
+$ docker run -it --rm -v c:/projects/cubee/cubee-frontend-server/helm-chart/cubee-frontend-server:/ansible gocreating/ansible-vault encrypt ./configMap-stg.yaml
+$ docker run -it --rm -v c:/projects/cubee/cubee-frontend-server/helm-chart/cubee-frontend-server:/ansible gocreating/ansible-vault decrypt ./configMap-prod.yaml
+$ docker run -it --rm -v c:/projects/cubee/cubee-frontend-server/helm-chart/cubee-frontend-server:/ansible gocreating/ansible-vault decrypt ./configMap-stg.yaml
+```
+
+## Helper
+
+``` bash
+$ docker system prune
 ```
