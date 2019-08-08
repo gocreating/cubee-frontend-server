@@ -12,6 +12,15 @@ const isProduction = (process.env.NODE_ENV === 'production');
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
 const server = express();
+
+server.get('/info', (req, res) => {
+  res.json({
+    repoName: process.env.repoName,
+    commitSHA1: process.env.commitSHA1,
+    buildDate: process.env.buildDate,
+    imageTag: process.env.imageTag,
+  });
+});
 server
   .disable('x-powered-by')
   // hack to serve production asset server in docker container
