@@ -1,0 +1,42 @@
+project:
+  name: cubee-frontend-server
+
+image:
+  repository: gocreating/cubee-frontend-server
+  tag: ${IMAGE_TAG}
+
+pod:
+  labels:
+    env: "prod"
+    cluster: "cubee-prod"
+
+healthz:
+  path: /
+  initialDelay: 15
+  period: 15
+  timeout: 10
+  success: 1
+  failure: 3
+
+autoScaling:
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  rules:
+    - host: cubee.cc
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: cubee-frontend-server
+            servicePort: 3000
+
+    - host: "*.cubee.cc"
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: cubee-frontend-server
+            servicePort: 3000

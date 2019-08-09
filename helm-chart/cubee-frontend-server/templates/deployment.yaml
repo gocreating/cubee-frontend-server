@@ -1,0 +1,54 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Values.project.name }}
+  labels:
+    app: {{ .Values.project.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.project.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.project.name }}
+        env: {{ .Values.pod.labels.env }}
+        cluster: {{ .Values.pod.labels.cluster }}
+    spec:
+      containers:
+      - name: {{ .Values.project.name }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        # resources:
+        #   requests:
+        #     memory: "80Mi"
+        strategy:
+          type: RollingUpdate
+          rollingUpdate:
+            maxSurge: 1         # how many pods we can add at a time
+            maxUnavailable: 0   # maxUnavailable define how many pods can be unavailable during the rolling update
+        ports:
+        - name: http
+          containerPort: 8000
+          protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.healthz.path | default "/" }}
+              port: http
+            initialDelaySeconds: {{ .Values.healthz.initialDelay | default 10 }}
+            periodSeconds: {{ .Values.healthz.period | default 15 }}
+            timeoutSeconds: {{ .Values.healthz.timeout | default 5 }}
+            successThreshold: {{ .Values.healthz.success | default 1 }}
+            failureThreshold: {{ .Values.healthz.failure | default 3 }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.healthz.path | default "/" }}
+              port: http
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config.json
+          subPath: config.json
+      volumes:
+      - name: config-volume
+        configMap:
+          name: credential-config-{{ .Values.project.name }}
