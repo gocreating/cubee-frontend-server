@@ -1,9 +1,8 @@
 import path from 'path';
 import express from 'express';
 import config from './config';
+import env from '../common/utils/env';
 import renderMarkup from './middlewares/renderMarkup';
-
-const isProduction = (process.env.NODE_ENV === 'production');
 
 const server = express();
 
@@ -32,7 +31,7 @@ server
   .disable('x-powered-by')
   // hack to serve production asset server in docker container
   // ref: <https://github.com/jaredpalmer/razzle/issues/389>
-  .use(express.static(isProduction ? path.join(__dirname, '../build/public') : process.env.RAZZLE_PUBLIC_DIR))
+  .use(express.static(env.isProduction ? path.join(__dirname, '../build/public') : process.env.RAZZLE_PUBLIC_DIR))
   .get('/*', renderMarkup);
 
 export default server;
