@@ -14,6 +14,10 @@ const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
 const server = express();
 
+server.get('/error', (req, res) => {
+  throw new Error('error on purpose');
+});
+
 server.get('/info', (req, res) => {
   res.json({
     repoName: process.env.repoName,
