@@ -3,6 +3,6 @@ set -e
 
 case "$@" in
 *)
-    exec yarn start:prod
+    exec yarn start:pm2
     ;;
 esac

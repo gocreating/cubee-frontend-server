@@ -15,7 +15,7 @@ COPY . /srv/cubee-frontend-server
 
 WORKDIR /srv/cubee-frontend-server
 
-RUN yarn global add razzle && \
+RUN yarn global add razzle pm2 && \
     yarn build
 
 ENV repoName=${PROJECT_REPONAME} \
