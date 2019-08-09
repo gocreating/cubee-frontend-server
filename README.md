@@ -27,6 +27,10 @@ $ docker-compose -f ./docker-compose-prod.yaml up --build
 ### dev/stg in host os
 
 ``` bash
+$ CONFIG_PATH="./config-stg.json" yarn start
+```
+
+``` bash
 $ yarn run build
 $ CONFIG_PATH="./config-stg.json" NODE_ENV=production node build/server.js
 ```
