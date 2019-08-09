@@ -5,6 +5,7 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { Capture } from 'react-loadable';
 import { getBundles } from 'react-loadable/webpack';
+import { ServerStyleSheet } from 'styled-components';
 import App from '../common/components/App';
 import stats from '../../build/react-loadable.json';
 import config from './config';
@@ -43,13 +44,27 @@ server
   .get('/*', (req, res) => {
     const context = {};
     const modules = [];
-    const markup = renderToString(
-      <Capture report={moduleName => modules.push(moduleName)}>
-        <StaticRouter context={context} location={req.url}>
-          <App />
-        </StaticRouter>
-      </Capture>
-    );
+    const sheet = new ServerStyleSheet();
+
+    let markup = '';
+    let styleTags = '';
+
+    try {
+      markup = renderToString(
+        sheet.collectStyles(
+          <Capture report={moduleName => modules.push(moduleName)}>
+            <StaticRouter context={context} location={req.url}>
+              <App />
+            </StaticRouter>
+          </Capture>
+        )
+      );
+      styleTags = sheet.getStyleTags();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      sheet.seal();
+    }
 
     if (context.url) {
       res.redirect(context.url);
@@ -96,6 +111,7 @@ server
             )
             .join('\n')
         }
+        ${styleTags}
     </head>
     <body>
         <div id="root">${markup}</div>

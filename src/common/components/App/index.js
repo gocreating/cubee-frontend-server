@@ -11,11 +11,16 @@ const AboutPage = Loadable({
   loader: () => import('../../pages/AboutPage'),
   loading: () => null,
 });
+const StyledPage = Loadable({
+  loader: () => import('../../pages/StyledPage'),
+  loading: () => null,
+});
 
 const App = () => (
   <Switch>
     <Route exact path="/" component={HomePage} />
     <Route exact path="/about" component={AboutPage} />
+    <Route exact path="/styled" component={StyledPage} />
   </Switch>
 );
 
