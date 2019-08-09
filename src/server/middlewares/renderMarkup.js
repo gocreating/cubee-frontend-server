@@ -1,5 +1,7 @@
+import serialize from 'serialize-javascript';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
+import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
 import { Capture } from 'react-loadable';
 import { getBundles } from 'react-loadable/webpack';
@@ -10,6 +12,7 @@ import App from '../../common/components/App';
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
 const renderMarkupMiddleware = (req, res) => {
+  const { store } = res.locals;
   const context = {};
   const modules = [];
   const sheet = new ServerStyleSheet();
@@ -21,9 +24,11 @@ const renderMarkupMiddleware = (req, res) => {
     markup = renderToString(
       sheet.collectStyles(
         <Capture report={moduleName => modules.push(moduleName)}>
-          <StaticRouter context={context} location={req.url}>
-            <App />
-          </StaticRouter>
+          <Provider store={store}>
+            <StaticRouter context={context} location={req.url}>
+              <App />
+            </StaticRouter>
+          </Provider>
         </Capture>
       )
     );
@@ -40,6 +45,7 @@ const renderMarkupMiddleware = (req, res) => {
     const bundles = getBundles(stats, modules);
     const chunks = bundles.filter(bundle => bundle.file.endsWith('.js'));
     const styles = bundles.filter(bundle => bundle.file.endsWith('.css'));
+    const finalState = store.getState();
 
     res.status(200).send(
       `<!doctype html>
@@ -83,6 +89,9 @@ const renderMarkupMiddleware = (req, res) => {
 </head>
 <body>
   <div id="root">${markup}</div>
+  <script>
+    window.__PRELOADED_STATE__ = ${serialize(finalState)}
+  </script>
 </body>
 </html>`
     );

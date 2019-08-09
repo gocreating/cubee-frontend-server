@@ -2,6 +2,8 @@ import path from 'path';
 import express from 'express';
 import config from './config';
 import env from '../common/utils/env';
+import configureStore from './middlewares/configureStore';
+import sampleFetchState from './middlewares/sampleFetchState';
 import renderMarkup from './middlewares/renderMarkup';
 
 const server = express();
@@ -26,6 +28,10 @@ server.get('/config', (req, res) => {
     bar: config.secretBar,
   });
 });
+
+server.get('/*', configureStore);
+
+server.get('/styled', sampleFetchState);
 
 server
   .disable('x-powered-by')
