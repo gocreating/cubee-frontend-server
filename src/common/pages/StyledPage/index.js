@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -53,6 +54,11 @@ class StyledPage extends Component {
     );
   }
 }
+
+StyledPage.propTypes = {
+  users: PropTypes.object.isRequired,
+  clearAuth: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   users: authSelectors.getUsers(state.auth),
