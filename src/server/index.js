@@ -5,8 +5,8 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { Capture } from 'react-loadable';
 import { getBundles } from 'react-loadable/webpack';
-import App from './App';
-import stats from '../build/react-loadable.json';
+import App from '../common/components/App';
+import stats from '../../build/react-loadable.json';
 import config from './config';
 
 const isProduction = (process.env.NODE_ENV === 'production');

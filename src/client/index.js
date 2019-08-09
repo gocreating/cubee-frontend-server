@@ -2,7 +2,7 @@ import React from 'react';
 import { hydrate } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import App from './App';
+import App from '../common/components/App';
 
 Loadable.preloadReady().then(() => {
   hydrate(
