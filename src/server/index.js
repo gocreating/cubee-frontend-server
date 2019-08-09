@@ -8,7 +8,7 @@ import renderMarkup from './middlewares/renderMarkup';
 
 const server = express();
 
-server.get('/error', (req, res) => {
+server.get('/error', () => {
   throw new Error('error on purpose');
 });
 

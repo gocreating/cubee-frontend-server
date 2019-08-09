@@ -7,7 +7,8 @@
     "build": "razzle build",
     "test": "razzle test --env=jsdom",
     "start:prod": "NODE_ENV=production node build/server.js",
-    "start:pm2": "NODE_ENV=production pm2-runtime build/server.js"
+    "start:pm2": "NODE_ENV=production pm2-runtime build/server.js",
+    "lint": "eslint ./src --config ./.eslintrc.js"
   },
   "dependencies": {
     "express": "^4.17.1",
@@ -22,5 +23,12 @@
     "redux-logger": "^3.0.6",
     "serialize-javascript": "^1.7.0",
     "styled-components": "^4.3.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.1.0",
+    "eslint-plugin-compat": "^3.3.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-react": "^7.14.3"
   }
 }
