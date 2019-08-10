@@ -1,8 +1,15 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Loadable from 'react-loadable';
+import { createGlobalStyle } from 'styled-components';
 import { Helmet } from 'react-helmet';
 import './App.css';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: #eee;
+  }
+`;
 
 const HomePage = Loadable({
   loader: () => import('../../pages/HomePage'),
@@ -25,6 +32,7 @@ const App = () => (
       <title>Cubee</title>
       <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
     </Helmet>
+    <GlobalStyle />
     <Switch>
       <Route exact path="/" component={HomePage} />
       <Route exact path="/about" component={AboutPage} />
