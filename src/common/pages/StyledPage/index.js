@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { Helmet } from 'react-helmet';
 import { withLayout } from '../../layouts/AppLayout';
 import {
   clearAuth,
@@ -42,6 +43,9 @@ class StyledPage extends Component {
 
     return (
       <Wrapper>
+        <Helmet>
+          <title>Styled Page</title>
+        </Helmet>
         <Header>Styled-Component Demo</Header>
         <Text>
           This is paragraph of text.

@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
 import { Capture } from 'react-loadable';
 import { getBundles } from 'react-loadable/webpack';
+import { Helmet } from 'react-helmet';
 import { ServerStyleSheet } from 'styled-components';
 import stats from '../../../build/react-loadable.json';
 import App from '../../common/components/App';
@@ -45,16 +46,16 @@ const renderMarkupMiddleware = (req, res) => {
     const bundles = getBundles(stats, modules);
     const chunks = bundles.filter(bundle => bundle.file.endsWith('.js'));
     const styles = bundles.filter(bundle => bundle.file.endsWith('.css'));
+    const helmet = Helmet.renderStatic();
     const finalState = store.getState();
 
     res.status(200).send(
       `<!doctype html>
 <html lang="">
 <head>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta charset="utf-8" />
-  <title>Welcome to Razzle</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  ${helmet.title.toString()}
+  ${helmet.meta.toString()}
+  ${helmet.link.toString()}
   ${
     assets.client.css
       ? `<link rel="stylesheet" href="${assets.client.css}">`
