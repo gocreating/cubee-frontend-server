@@ -10,5 +10,7 @@ services:
       - ./node_modules:/srv/cubee-frontend-server/node_modules
       - ./src:/srv/cubee-frontend-server/src
       - ./config-stg.json:/etc/config.json
+    environment:
+      - CUBEE_ENV=staging
     entrypoint: yarn
     command: "start"

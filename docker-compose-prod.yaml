@@ -7,5 +7,7 @@ services:
       - "3000:3000"
     volumes:
       - ./config-prod.json:/etc/config.json
+    environment:
+      - CUBEE_ENV=production
     entrypoint: yarn
     command: "start:pm2"

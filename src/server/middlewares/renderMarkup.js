@@ -91,6 +91,7 @@ const renderMarkupMiddleware = (req, res) => {
 <body>
   <div id="root">${markup}</div>
   <script>
+    window.CUBEE_ENV = ${serialize(process.env.CUBEE_ENV)};
     window.__PRELOADED_STATE__ = ${serialize(finalState)}
   </script>
 </body>

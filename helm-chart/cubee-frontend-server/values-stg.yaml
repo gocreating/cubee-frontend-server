@@ -4,6 +4,9 @@ project:
 image:
   repository: gocreating/cubee-frontend-server
   tag: ${IMAGE_TAG}
+  env:
+    - name: CUBEE_ENV
+      value: "staging"
 
 pod:
   labels:

@@ -19,6 +19,8 @@ spec:
       containers:
       - name: {{ .Values.project.name }}
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        env:
+{{ toYaml .Values.image.env | indent 10 }}
         # resources:
         #   requests:
         #     memory: "80Mi"
