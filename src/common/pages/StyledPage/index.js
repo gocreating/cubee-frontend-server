@@ -9,6 +9,7 @@ import {
   clearAuth,
   selectors as authSelectors,
 } from '../../ducks/auth';
+import { getStatus } from '../../ducks/status';
 
 const Wrapper = styled.div`
   background-color: #777;
@@ -25,7 +26,7 @@ const Text = styled.p`
   margin: 0px;
   padding: 0px;
   font-size: 14px;
-  color: green;
+  color: white;
 
   &:hover {
     color: blue;
@@ -38,8 +39,13 @@ class StyledPage extends Component {
     clearAuth();
   }
 
+  handleBtnGetStatusClick = () => {
+    const { getStatus } = this.props;
+    getStatus();
+  }
+
   render() {
-    const { users } = this.props;
+    const { users, status } = this.props;
 
     return (
       <Wrapper>
@@ -53,7 +59,11 @@ class StyledPage extends Component {
         <Text>
           {JSON.stringify(users)}
         </Text>
+        <Text>
+          {JSON.stringify(status)}
+        </Text>
         <button onClick={this.handleBtnClearClick}>Clear Auth</button>
+        <button onClick={this.handleBtnGetStatusClick}>Get Status</button>
       </Wrapper>
     );
   }
@@ -61,15 +71,19 @@ class StyledPage extends Component {
 
 StyledPage.propTypes = {
   users: PropTypes.object.isRequired,
+  status: PropTypes.object.isRequired,
   clearAuth: PropTypes.func.isRequired,
+  getStatus: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   users: authSelectors.getUsers(state.auth),
+  status: state.status,
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   clearAuth,
+  getStatus,
 }, dispatch);
 
 export default withLayout({ nav: true })(

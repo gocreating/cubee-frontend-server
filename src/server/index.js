@@ -4,6 +4,7 @@ import config from './config';
 import env from '../common/utils/env';
 import configureStore from './middlewares/configureStore';
 import sampleFetchState from './middlewares/sampleFetchState';
+import getStatus from './middlewares/getStatus';
 import renderMarkup from './middlewares/renderMarkup';
 
 const server = express();
@@ -31,7 +32,7 @@ server.get('/config', (req, res) => {
 
 server.get('/*', configureStore);
 
-server.get('/styled', sampleFetchState);
+server.get('/styled', sampleFetchState, getStatus);
 
 server
   .disable('x-powered-by')

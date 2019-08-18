@@ -34,6 +34,7 @@ const renderMarkupMiddleware = (req, res) => {
       )
     );
     styleTags = sheet.getStyleTags();
+    store.close();
   } catch (error) {
     console.error(error);
   } finally {

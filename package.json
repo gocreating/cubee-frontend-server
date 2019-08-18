@@ -11,6 +11,8 @@
     "lint": "eslint ./src --config ./.eslintrc.js"
   },
   "dependencies": {
+    "@redux-saga/simple-saga-monitor": "^1.0.2",
+    "cross-fetch": "^3.0.4",
     "express": "^4.17.1",
     "prop-types": "^15.7.2",
     "razzle": "^3.0.0",
@@ -22,6 +24,7 @@
     "react-router-dom": "^5.0.1",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
+    "redux-saga": "^1.0.5",
     "serialize-javascript": "^1.7.0",
     "styled-components": "^4.3.2"
   },
