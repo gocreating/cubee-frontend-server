@@ -27,12 +27,12 @@ $ docker-compose -f ./docker-compose-prod.yaml up --build
 ### dev/stg in host os
 
 ``` bash
-$ CONFIG_PATH="./config-stg.json" yarn start
+$ CONFIG_PATH="./config-stg.json" CUBEE_ENV="staging" yarn start
 ```
 
 ``` bash
 $ yarn run build
-$ CONFIG_PATH="./config-stg.json" NODE_ENV=production node build/server.js
+$ CONFIG_PATH="./config-stg.json" CUBEE_ENV="production" NODE_ENV=production node build/server.js
 ```
 
 ## Encryption/Decryption Sensitive File with Ansible-Vault
