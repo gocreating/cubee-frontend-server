@@ -73,6 +73,10 @@ const StyledPage = Loadable({
   loader: () => import('../../pages/StyledPage'),
   loading: () => null,
 });
+const ComponentDemoPage = Loadable({
+  loader: () => import('../../pages/ComponentDemoPage'),
+  loading: () => null,
+});
 
 const htmlFontSize = 16;
 const pxToRem = (size) => `${size / htmlFontSize}rem`;
@@ -118,6 +122,7 @@ const App = () => (
         <Route exact path="/" component={HomePage} />
         <Route exact path="/about" component={AboutPage} />
         <Route exact path="/styled" component={StyledPage} />
+        <Route exact path="/components" component={ComponentDemoPage} />
       </Switch>
     </>
   </ThemeProvider>

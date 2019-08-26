@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
+import { Component as ComponentIcon } from 'styled-icons/boxicons-solid/Component';
 import Divider from '../components/Divider';
 import logo from '../../../public/logo.svg';
 
@@ -37,6 +38,13 @@ const MenuItem = styled.li`
     color: ${props => props.theme.colors.white};
     padding: ${props => props.theme.spacing.unit2} ${props => props.theme.spacing.unit2};
     height: 100%;
+    line-height: 100%;
+    font-size: ${props => props.theme.type.fontSize};
+
+    svg {
+      min-width: ${props => props.theme.type.fontSize};
+      margin-right: ${props => props.theme.spacing.unit1};
+  }
   }
   :hover a {
     color: ${props => props.theme.colors.highlight};
@@ -70,6 +78,12 @@ const Nav = () => (
     <Menu pullRight>
       <MenuItem>
         <Link to="/styled">Styled</Link>
+      </MenuItem>
+      <MenuItem>
+        <Link to="/components">
+          <ComponentIcon />
+          Components
+        </Link>
       </MenuItem>
     </Menu>
   </StyledNav>
