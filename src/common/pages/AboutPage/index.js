@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { withLayout } from '../../layouts/AppLayout';
+import Container from '../../components/Container';
 
 class AboutPage extends Component {
   render() {
     return (
-      <div>
+      <Container>
         About Cubee
-      </div>
+      </Container>
     );
   }
 }

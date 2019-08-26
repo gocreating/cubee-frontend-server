@@ -5,20 +5,14 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
 import { withLayout } from '../../layouts/AppLayout';
+import Container from '../../components/Container';
 import {
   clearAuth,
   selectors as authSelectors,
 } from '../../ducks/auth';
 import { getStatus } from '../../ducks/status';
 
-const Wrapper = styled.div`
-  background-color: #777;
-`;
-
-const Header = styled.h1`
-  margin: 0px;
-  padding: 0px;
-  font-size: 18px;
+const StyledH3 = styled.h3`
   color: red;
 `;
 
@@ -26,7 +20,6 @@ const Text = styled.p`
   margin: 0px;
   padding: 0px;
   font-size: 14px;
-  color: white;
 
   &:hover {
     color: blue;
@@ -48,11 +41,11 @@ class StyledPage extends Component {
     const { users, status } = this.props;
 
     return (
-      <Wrapper>
+      <Container>
         <Helmet>
           <title>Styled Page</title>
         </Helmet>
-        <Header>Styled-Component Demo</Header>
+        <StyledH3>Styled-Component Demo</StyledH3>
         <Text>
           This is paragraph of text.
         </Text>
@@ -64,7 +57,7 @@ class StyledPage extends Component {
         </Text>
         <button onClick={this.handleBtnClearClick}>Clear Auth</button>
         <button onClick={this.handleBtnGetStatusClick}>Get Status</button>
-      </Wrapper>
+      </Container>
     );
   }
 }
