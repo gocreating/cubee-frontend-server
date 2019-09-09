@@ -1,23 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import themeGet from '@styled-system/theme-get';
 import Container from '../../components/Container';
+import { H2 } from '../../components/Heading';
 
-const StyledContainer = styled(Container)`
-  margin-bottom: ${props => props.theme.spacing.unit2};
-`;
-
-const Header = styled.h2`
-  color: ${props => props.theme.colors.primary};
-  border-bottom: 2px solid ${props => props.theme.colors.grey};
-  margin-bottom: ${props => props.theme.spacing.unit2};
+const StyledH2 = styled(H2).attrs({
+  color: 'primary',
+  pt: 5,
+  mt: 0,
+  mb: 3,
+})`
+  border-bottom: 2px solid ${themeGet('colors.grey')};
 `;
 
 const Block = ({ title, children }) => (
-  <StyledContainer padSize={0}>
-    <Header>{title}</Header>
+  <Container p={3}>
+    <StyledH2>{title}</StyledH2>
     {children}
-  </StyledContainer>
+  </Container>
 );
 
 Block.propTypes = {
