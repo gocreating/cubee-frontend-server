@@ -5,6 +5,7 @@ import { User as UserIcon } from 'styled-icons/boxicons-regular/User';
 import { Helmet } from 'react-helmet';
 import { withLayout } from '../../layouts/AppLayout';
 import Container from '../../components/Container';
+import Heading, { H1, H2, H3, H4, H5, H6 } from '../../components/Heading';
 import Button, { ButtonGroup } from '../../components/Button';
 import Divider from '../../components/Divider';
 import Form from '../../components/Form';
@@ -47,19 +48,19 @@ class ComponentDemoPage extends Component {
         </Helmet>
 
         <Block title="Headers／標題">
-          <h1>This is header level one</h1>
-          <h2>This is header level two</h2>
-          <h3>This is header level three</h3>
-          <h4>This is header level four</h4>
-          <h5>This is header level five</h5>
-          <h6>This is header level six</h6>
-          <Divider hidden size={2} />
-          <h1>這是標題一</h1>
-          <h2>這是標題二</h2>
-          <h3>這是標題三</h3>
-          <h4>這是標題四</h4>
-          <h5>這是標題五</h5>
-          <h6>這是標題六</h6>
+          <H1>This is header level one</H1>
+          <H2>This is header level two</H2>
+          <H3>This is header level three</H3>
+          <H4>This is header level four</H4>
+          <H5>This is header level five</H5>
+          <H6>This is header level six</H6>
+          <Divider hidden />
+          <Heading level={1}>這是標題一</Heading>
+          <Heading level={2}>這是標題二</Heading>
+          <Heading level={3}>這是標題三</Heading>
+          <Heading level={4}>這是標題四</Heading>
+          <Heading level={5}>這是標題五</Heading>
+          <Heading level={6}>這是標題六</Heading>
         </Block>
 
         <Block title="Colors／色彩">
