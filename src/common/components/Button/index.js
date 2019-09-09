@@ -1,52 +1,49 @@
-import styled, { css } from 'styled-components';
-import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { variant } from 'styled-system';
+import themeGet from '@styled-system/theme-get';
+import Box from '../Box';
 
-const Button = styled.button`
+const StyledButton = styled(Box).attrs({
+  as: 'button',
+  px: 3,
+  py: 2,
+  borderRadius: 1,
+})`
   outline: none;
   border: none;
-  padding: ${props => props.theme.spacing.unit1} ${props => props.theme.spacing.unit2};
   cursor: pointer;
   user-select: none;
-  border-radius: 4px;
-
-  font-family: ${props => props.theme.type.fontFamily};
-  font-size: ${props => props.theme.type.fontSize};
-  color: ${props => props.theme.colors.black};
-  background-color: ${props => props.theme.colors.grey};
 
   &:hover {
     filter: brightness(105%);
   }
-
   &:active {
     filter: brightness(95%);
   }
 
-  ${props => props.primary && css`
-    color: ${props.theme.colors.white};
-    background-color: ${props.theme.colors.primary};
-  `}
-
-  ${props => props.secondary && css`
-    color: ${props.theme.colors.white};
-    background-color: ${props.theme.colors.secondary};
-  `}
+  ${variant({
+    variants: {
+      primary: {
+        color: 'white',
+        bg: 'primary',
+      },
+      secondary: {
+        color: 'white',
+        bg: 'secondary',
+      },
+    },
+  })}
 `;
 
-Button.propTypes = {
-  primary: PropTypes.bool,
-  secondary: PropTypes.bool,
+StyledButton.defaultProps = {
+  color: 'black',
+  bg: 'grey',
 };
 
-Button.defaultProps = {
-  primary: false,
-  secondary: false,
-};
-
-export const ButtonGroup = styled.div`
-  ${Button}:not(:last-child) {
-    margin-right: ${props => props.theme.spacing.unit1};
+export const ButtonGroup = styled(Box)`
+  ${StyledButton}:not(:last-child) {
+    margin-right: ${themeGet('space.2')}px;
   }
 `;
 
-export default Button;
+export default StyledButton;

@@ -100,14 +100,16 @@ class ComponentDemoPage extends Component {
         <Block title="Buttons／按鈕">
           <ButtonGroup>
             <Button>Default</Button>
-            <Button primary>Primary</Button>
-            <Button secondary>Secondary</Button>
+            <Button variant="primary">Primary</Button>
+            <Button variant="secondary">Secondary</Button>
+            <Button bg="red" color="white">Custom</Button>
           </ButtonGroup>
           <Divider hidden />
           <ButtonGroup>
             <Button>預設</Button>
-            <Button primary>主要</Button>
-            <Button secondary>次要</Button>
+            <Button variant="primary">主要</Button>
+            <Button variant="secondary">次要</Button>
+            <Button bg="red" color="white">客製</Button>
           </ButtonGroup>
         </Block>
 
