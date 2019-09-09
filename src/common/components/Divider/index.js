@@ -1,29 +1,37 @@
-import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
+import styled, { css } from 'styled-components';
+import { variant } from 'styled-system';
+import themeGet from '@styled-system/theme-get';
+import Box from '../Box';
 
-const Divider = styled.div`
+const Divider = styled(Box)`
   display: block;
-  ${props => !props.vertical ? css`
-    margin: ${props.theme.spacing.unit * props.size}px 0px;
+  clear: both;
+
+  ${props => !props.hidden && ((props.variant !== 'vertical') ? css`
+    border-top: 2px solid ${themeGet('colors.grey')};
   ` : css`
-    margin: 0px ${props.theme.spacing.unit * props.size}px;
-  `}
-  ${props => (!props.vertical && !props.hidden) ? css`
-    border-top: 2px solid ${props.theme.colors.grey};
-  ` : css`
-    border-left: 2px solid ${props.theme.colors.grey};
-  `}
+    border-left: 2px solid ${themeGet('colors.grey')};
+  `)}
+
+  ${variant({
+    variants: {
+      horizontal: {
+        my: 2,
+      },
+      vertical: {
+        mx: 2,
+      },
+    },
+  })}
 `;
 
 Divider.propTypes = {
-  size: PropTypes.number,
-  vertical: PropTypes.bool,
   hidden: PropTypes.bool,
 };
 
 Divider.defaultProps = {
-  size: 1,
-  vertical: false,
+  variant: 'horizontal',
   hidden: false,
 };
 

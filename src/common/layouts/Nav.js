@@ -44,7 +44,7 @@ const MenuItem = styled.li`
     svg {
       min-width: ${props => props.theme.type.fontSize};
       margin-right: ${props => props.theme.spacing.unit1};
-  }
+    }
   }
   :hover a {
     color: ${props => props.theme.colors.highlight};
@@ -56,11 +56,6 @@ const Logo = styled.img`
   margin-right: 0.5rem;
 `;
 
-const StyledDivider = styled(Divider)`
-  margin-top: ${props => props.theme.spacing.unit2};
-  margin-bottom: ${props => props.theme.spacing.unit2};
-`;
-
 const Nav = () => (
   <StyledNav>
     <Menu>
@@ -70,7 +65,7 @@ const Nav = () => (
           Cubee
         </Link>
       </MenuItem>
-      <StyledDivider vertical />
+      <Divider variant="vertical" my={3} />
       <MenuItem>
         <Link to="/about">About</Link>
       </MenuItem>
