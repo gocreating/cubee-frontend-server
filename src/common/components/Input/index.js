@@ -1,14 +1,17 @@
 import styled from 'styled-components';
+import themeGet from '@styled-system/theme-get';
+import Box from '../Box';
 
-const Input = styled.input`
-  padding: ${props => props.theme.spacing.unit1};
-  border-radius: 4px;
-  font-family: ${props => props.theme.type.fontFamily};
-  font-size: ${props => props.theme.type.fontSize};
-  border: 1px solid ${props => props.theme.colors.black};
+const Input = styled(Box).attrs({
+  as: 'input',
+  p: 2,
+  borderRadius: 1,
+})`
+  outline: none;
+  border: 1px solid ${themeGet('colors.black')};
 
   ::placeholder {
-    color: ${props => props.theme.colors.black};
+    color: ${themeGet('colors.black')};
     opacity: 0.5;
     user-select: none;
   }
