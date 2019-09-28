@@ -42,7 +42,7 @@ class ComponentDemoPage extends Component {
     const { theme } = this.props;
 
     return (
-      <Container>
+      <Container px={[2, null, 6]} pt={0}>
         <Helmet>
           <title>Component Demo</title>
         </Helmet>
@@ -115,7 +115,7 @@ class ComponentDemoPage extends Component {
         </Block>
 
         <Block title="Form／表單">
-          <h4>Block Form</h4>
+          <H3>Block Form</H3>
           <Form>
             <Form.Field>
               <label htmlFor="block-username">Username</label>
@@ -135,11 +135,12 @@ class ComponentDemoPage extends Component {
                 placeholder="Input your password"
               />
             </Form.Field>
+            <Button type="button" variant="primary">Register</Button>
           </Form>
 
-          <h4>Inline Form</h4>
+          <H3>Inline Form</H3>
           <Form>
-            <Form.Field inline labelMinSize={12}>
+            <Form.Field inline minLabelWidth={12}>
               <label htmlFor="inline-username">Username</label>
               <Input
                 id="inline-username"
@@ -148,7 +149,7 @@ class ComponentDemoPage extends Component {
                 placeholder="Some Text"
               />
             </Form.Field>
-            <Form.Field inline required labelMinSize={12}>
+            <Form.Field inline required minLabelWidth={12}>
               <label htmlFor="inline-password">Password</label>
               <Input
                 id="inline-password"
@@ -157,6 +158,7 @@ class ComponentDemoPage extends Component {
                 placeholder="Input your password"
               />
             </Form.Field>
+            <Button type="button" variant="primary">Register</Button>
           </Form>
         </Block>
 
