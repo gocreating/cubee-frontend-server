@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
+import { typography } from 'styled-system';
+import themeGet from '@styled-system/theme-get';
 import { Link } from 'react-router-dom';
 import { Component as ComponentIcon } from 'styled-icons/boxicons-solid/Component';
 import Divider from '../components/Divider';
@@ -8,8 +10,8 @@ import logo from '../../../public/logo.svg';
 
 const StyledNav = styled.nav`
   display: flex;
-  padding: ${props => props.theme.spacing.unit * 4}px ${props => props.theme.spacing.unit2};
-  background-color: ${props => props.theme.colors.primary};
+  padding: ${themeGet('space.5')}px ${themeGet('space.6')}px;
+  background-color: ${themeGet('colors.primary')};
 `;
 
 const Menu = styled.ul`
@@ -35,30 +37,26 @@ const MenuItem = styled.li`
     text-decoration: none;
     display: flex;
     align-items: center;
-    color: ${props => props.theme.colors.white};
-    padding: ${props => props.theme.spacing.unit2} ${props => props.theme.spacing.unit2};
+    color: ${themeGet('colors.white')};
+    padding: ${themeGet('space.3')}px ${themeGet('space.3')}px;
     height: 100%;
     line-height: 100%;
-    font-size: ${props => props.theme.type.fontSize};
+
+    ${typography}
 
     svg {
-      min-width: ${props => props.theme.type.fontSize};
-      margin-right: ${props => props.theme.spacing.unit1};
-  }
+      min-width: ${themeGet('fontSizes.body')};
+      margin-right: ${themeGet('space.2')}px;
+    }
   }
   :hover a {
-    color: ${props => props.theme.colors.highlight};
+    color: ${themeGet('colors.highlight')};
   }
 `;
 
 const Logo = styled.img`
   height: 1.5rem;
   margin-right: 0.5rem;
-`;
-
-const StyledDivider = styled(Divider)`
-  margin-top: ${props => props.theme.spacing.unit2};
-  margin-bottom: ${props => props.theme.spacing.unit2};
 `;
 
 const Nav = () => (
@@ -70,7 +68,7 @@ const Nav = () => (
           Cubee
         </Link>
       </MenuItem>
-      <StyledDivider vertical />
+      <Divider variant="vertical" my={3} />
       <MenuItem>
         <Link to="/about">About</Link>
       </MenuItem>

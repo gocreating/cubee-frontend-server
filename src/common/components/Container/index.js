@@ -1,17 +1,12 @@
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import { space } from 'styled-system';
+import themeGet from '@styled-system/theme-get';
+import Box from '../Box';
 
-const Container = styled.div`
+const Container = styled(Box)`
   display: block;
-  padding: ${props => props.theme.spacing.unit * props.padSize}px;
+  padding: ${themeGet('space.5')}px;
+  ${space}
 `;
-
-Container.propTypes = {
-  padSize: PropTypes.number,
-};
-
-Container.defaultProps = {
-  padSize: 4,
-};
 
 export default Container;
