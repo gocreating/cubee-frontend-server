@@ -38,7 +38,7 @@ commands:
       - run:
           name: Setup Helm
           command: |
-            curl https://raw.githubusercontent.com/helm/helm/v2.14.3/scripts/get | bash
+            curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
             helm init --client-only --history-max 10
       - run:
           name: Install Chart
@@ -55,8 +55,7 @@ jobs:
       - image: google/cloud-sdk
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       - run:
           name: Setup Environment Variable
           command: |
