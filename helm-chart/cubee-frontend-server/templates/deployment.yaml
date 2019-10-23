@@ -31,7 +31,7 @@ spec:
             maxUnavailable: 0   # maxUnavailable define how many pods can be unavailable during the rolling update
         ports:
         - name: http
-          containerPort: 8000
+          containerPort: 3000
           protocol: TCP
         livenessProbe:
           httpGet:
