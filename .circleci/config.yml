@@ -125,7 +125,7 @@ jobs:
     environment:
       - PROJECT_NAME: "cubee-frontend-server"
       - HELM_CHART_NAME: "cubee-frontend-server"
-      - GOOGLE_PROJECT_ID: "cubee-247317"
+      - GOOGLE_PROJECT_ID: "cubee-259905"
       - GOOGLE_COMPUTE_ZONE: "asia-east1-a"
       - GOOGLE_CLUSTER_NAME: "cubee-stg"
     steps:
@@ -140,7 +140,7 @@ jobs:
     environment:
       - PROJECT_NAME: "cubee-frontend-server"
       - HELM_CHART_NAME: "cubee-frontend-server"
-      - GOOGLE_PROJECT_ID: "cubee-247317"
+      - GOOGLE_PROJECT_ID: "cubee-259905"
       - GOOGLE_COMPUTE_ZONE: "asia-east1-a"
       - GOOGLE_CLUSTER_NAME: "cubee-prod"
     steps:
