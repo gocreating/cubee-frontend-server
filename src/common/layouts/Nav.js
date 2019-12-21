@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { typography } from 'styled-system';
 import themeGet from '@styled-system/theme-get';
 import { Link } from 'react-router-dom';
 import { Component as ComponentIcon } from 'styled-icons/boxicons-solid/Component';
+import { User as UserIcon } from 'styled-icons/fa-solid/User';
+import { selectors as authSelectors } from '../ducks/auth';
 import Divider from '../components/Divider';
 import logo from '../../../public/logo.svg';
 
@@ -59,7 +62,7 @@ const Logo = styled.img`
   margin-right: 0.5rem;
 `;
 
-const Nav = () => (
+const Nav = ({ isAuth }) => (
   <StyledNav>
     <Menu>
       <MenuItem>
@@ -83,8 +86,34 @@ const Nav = () => (
           Components
         </Link>
       </MenuItem>
+      {!isAuth && (
+        <MenuItem>
+          <Link to="/login">
+            <UserIcon />
+            Login
+          </Link>
+        </MenuItem>
+      )}
+      {isAuth && (
+        <MenuItem>
+          <Link to="#">
+            <UserIcon />
+            Logout
+          </Link>
+        </MenuItem>
+      )}
     </Menu>
   </StyledNav>
 );
 
-export default Nav;
+Nav.propTypes = {
+  isAuth: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  isAuth: authSelectors.getIsAuth(state),
+});
+
+export default connect(mapStateToProps)(
+  Nav,
+);
