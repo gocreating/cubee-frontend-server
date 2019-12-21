@@ -70,7 +70,7 @@ StyledPage.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  users: authSelectors.getUsers(state.auth),
+  users: authSelectors.getUsers(state),
   status: state.status,
 });
 
