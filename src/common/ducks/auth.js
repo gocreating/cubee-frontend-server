@@ -109,7 +109,7 @@ export const sagas = {
   *handleLoginSuccess(action) {
     const { res } = action.payload;
     const { data } = res;
-    yield put(setAuth(data.accessToken, data.user));
+    yield put(setAuth(data.access_token, data.user));
   },
   handleLoginFail(action) {
     const { res } = action.payload;
