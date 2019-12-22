@@ -1,4 +1,7 @@
 {
   "presets": ["razzle/babel"],
-  "plugins": ["react-loadable/babel"]
+  "plugins": [
+    "react-loadable/babel",
+    ["styled-components", { "ssr": true }]
+  ]
 }
