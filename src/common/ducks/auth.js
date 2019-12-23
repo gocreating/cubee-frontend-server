@@ -155,16 +155,13 @@ export default (state = defaultState, action) => {
     case SET_AUTH: {
       const { accessToken, user } = action.payload;
       const userId = user.id;
-      return {
-        authUserId: userId,
-        users: {
-          ...state.users,
-          [userId]: {
-            accessToken,
-            ...user,
-          },
-        },
-      };
+      return fromJS(state)
+        .set('authUserId', userId)
+        .setIn(['users', userId], {
+          accessToken,
+          ...user,
+        })
+        .toJS();
     }
     case CLEAR_AUTH:
       return defaultState;
