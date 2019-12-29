@@ -35,9 +35,9 @@ export const loginSuccess = (res) => ({
   payload: { res },
 });
 
-export const loginFail = (res) => ({
+export const loginFail = (error, res) => ({
   type: LOGIN_FAIL,
-  payload: { res },
+  payload: { error, res },
 });
 
 /**
@@ -89,22 +89,27 @@ export const selectors = {
  */
 export const sagas = {
   *handleLoginRequest(action) {
-    const { payload } = action;
-    const res = yield call(apiAgent, `${API_HOST}/auth/login`, {
-      method: 'post',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: payload.username,
-        password: payload.password,
-      }),
-    });
-    if (res.code !== 200) {
-      yield put(loginFail(res));
-    } else {
-      yield put(loginSuccess(res));
+    try {
+      const { payload } = action;
+      const res = yield call(apiAgent, `${API_HOST}/auth/login`, {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          username: payload.username,
+          password: payload.password,
+        }),
+      });
+      if (res.code !== 200) {
+        yield put(loginFail(null, res));
+      } else {
+        yield put(loginSuccess(res));
+      }
+    } catch (err) {
+      yield put(loginFail(err));
     }
   },
   *handleLoginSuccess(action) {
@@ -114,7 +119,9 @@ export const sagas = {
   },
   handleLoginFail(action) {
     const { res } = action.payload;
-    alert(res.data.message);
+    if (res) {
+      alert(res.data.message);
+    }
   },
 };
 
