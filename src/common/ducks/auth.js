@@ -59,13 +59,14 @@ const defaultState = {
  */
 export const selectors = {
   getUserId(state) {
-    return fromJS(state.auth)
+    const authUserId = fromJS(state.auth)
       .get('authUserId');
+    return authUserId ? `${authUserId}` : null;
   },
   getUser(state) {
-    const authUserId = this.getUserId(state);
+    const authUserId = selectors.getUserId(state);
     return fromJS(state.auth)
-      .getIn(['users', authUserId])
+      .getIn(['users', authUserId], fromJS({}))
       .toJS();
   },
   getUsers(state) {
