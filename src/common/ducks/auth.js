@@ -1,7 +1,7 @@
 import { fromJS } from 'immutable';
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { API_HOST } from '../config';
-import apiAgent from '../api/agent';
+import apiAgent, { injectCredentials } from '../api/agent';
 
 /**
  * Actions
@@ -9,6 +9,10 @@ import apiAgent from '../api/agent';
 const LOGIN_REQUEST = 'LOGIN_REQUEST';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_FAIL = 'LOGIN_FAIL';
+
+const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
+const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+const LOGOUT_FAIL = 'LOGOUT_FAIL';
 
 const SET_AUTH = 'SET_AUTH';
 const CLEAR_AUTH = 'CLEAR_AUTH';
@@ -40,11 +44,31 @@ export const loginFail = (error, res) => ({
   payload: { error, res },
 });
 
+export const logoutRequest = () => ({
+  type: LOGOUT_REQUEST,
+});
+
+export const logoutSuccess = (res) => ({
+  type: LOGOUT_SUCCESS,
+  payload: { res },
+});
+
+export const logoutFail = (error, res) => ({
+  type: LOGOUT_FAIL,
+  payload: { error, res },
+});
+
 /**
  * Default State
  */
 const defaultState = {
   loginMeta: {
+    isRequesting: false,
+    isRequested: false,
+    isRequestSuccess: false,
+    isRequestFail: false,
+  },
+  logoutMeta: {
     isRequesting: false,
     isRequested: false,
     isRequestSuccess: false,
@@ -82,6 +106,10 @@ export const selectors = {
     return fromJS(state.auth)
       .getIn(['loginMeta', 'isRequesting']);
   },
+  getIsLoggingOut(state) {
+    return fromJS(state.auth)
+      .getIn(['logoutMeta', 'isRequesting']);
+  },
 };
 
 /**
@@ -117,6 +145,30 @@ export const sagas = {
     const { data } = res;
     yield put(setAuth(data.access_token, data.csrf_token, data.user));
   },
+  *handleLogoutRequest() {
+    try {
+      const { accessToken, csrfToken } = yield select(selectors.getUser);
+      const res = yield call(apiAgent, `${API_HOST}/auth/logout`, injectCredentials({
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': csrfToken,
+        },
+        credentials: 'include',
+      }, accessToken));
+      if (res.code !== 200) {
+        yield put(logoutFail(null, res));
+      } else {
+        yield put(logoutSuccess(res));
+      }
+    } catch (err) {
+      yield put(logoutFail(err));
+    }
+  },
+  *handleLogoutSuccess() {
+    yield put(clearAuth());
+  },
   handleRequestFail(action) {
     const { res } = action.payload;
     if (res) {
@@ -134,6 +186,15 @@ export const rootSaga = {
   },
   *loginFail() {
     yield takeEvery(LOGIN_FAIL, sagas.handleRequestFail);
+  },
+  *logoutRequest() {
+    yield takeEvery(LOGOUT_REQUEST, sagas.handleLogoutRequest);
+  },
+  *logoutSuccess() {
+    yield takeEvery(LOGOUT_SUCCESS, sagas.handleLogoutSuccess);
+  },
+  *logoutFail() {
+    yield takeEvery(LOGOUT_FAIL, sagas.handleRequestFail);
   },
 };
 
@@ -159,6 +220,24 @@ export default (state = defaultState, action) => {
         .setIn(['loginMeta', 'isRequested'], true)
         .setIn(['loginMeta', 'isRequestSuccess'], false)
         .setIn(['loginMeta', 'isRequestFail'], true)
+        .toJS();
+    case LOGOUT_REQUEST:
+      return fromJS(state)
+        .setIn(['logoutMeta', 'isRequesting'], true)
+        .toJS();
+    case LOGOUT_SUCCESS:
+      return fromJS(state)
+        .setIn(['logoutMeta', 'isRequesting'], false)
+        .setIn(['logoutMeta', 'isRequested'], true)
+        .setIn(['logoutMeta', 'isRequestSuccess'], true)
+        .setIn(['logoutMeta', 'isRequestFail'], false)
+        .toJS();
+    case LOGOUT_FAIL:
+      return fromJS(state)
+        .setIn(['logoutMeta', 'isRequesting'], false)
+        .setIn(['logoutMeta', 'isRequested'], true)
+        .setIn(['logoutMeta', 'isRequestSuccess'], false)
+        .setIn(['logoutMeta', 'isRequestFail'], true)
         .toJS();
     case SET_AUTH: {
       const { accessToken, csrfToken, user } = action.payload;
