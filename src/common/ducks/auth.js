@@ -16,9 +16,9 @@ const CLEAR_AUTH = 'CLEAR_AUTH';
 /**
  * Action Creators
  */
-export const setAuth = (accessToken, user) => ({
+export const setAuth = (accessToken, csrfToken, user) => ({
   type: SET_AUTH,
-  payload: { accessToken, user },
+  payload: { accessToken, csrfToken, user },
 });
 
 export const clearAuth = () => ({
@@ -115,7 +115,7 @@ export const sagas = {
   *handleLoginSuccess(action) {
     const { res } = action.payload;
     const { data } = res;
-    yield put(setAuth(data.access_token, data.user));
+    yield put(setAuth(data.access_token, data.csrf_token, data.user));
   },
   handleLoginFail(action) {
     const { res } = action.payload;
@@ -161,12 +161,13 @@ export default (state = defaultState, action) => {
         .setIn(['loginMeta', 'isRequestFail'], true)
         .toJS();
     case SET_AUTH: {
-      const { accessToken, user } = action.payload;
+      const { accessToken, csrfToken, user } = action.payload;
       const userId = user.id;
       return fromJS(state)
         .set('authUserId', userId)
         .setIn(['users', userId], {
           accessToken,
+          csrfToken,
           ...user,
         })
         .toJS();
