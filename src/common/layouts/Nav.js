@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { typography } from 'styled-system';
@@ -7,7 +8,10 @@ import themeGet from '@styled-system/theme-get';
 import { Link } from 'react-router-dom';
 import { Component as ComponentIcon } from 'styled-icons/boxicons-solid/Component';
 import { User as UserIcon } from 'styled-icons/fa-solid/User';
-import { selectors as authSelectors } from '../ducks/auth';
+import {
+  logoutRequest,
+  selectors as authSelectors,
+} from '../ducks/auth';
 import Divider from '../components/Divider';
 import logo from '../../../public/logo.svg';
 
@@ -62,58 +66,72 @@ const Logo = styled.img`
   margin-right: 0.5rem;
 `;
 
-const Nav = ({ isAuth }) => (
-  <StyledNav>
-    <Menu>
-      <MenuItem>
-        <Link to="/">
-          <Logo src={logo} />
-          Cubee
-        </Link>
-      </MenuItem>
-      <Divider variant="vertical" my={3} />
-      <MenuItem>
-        <Link to="/about">About</Link>
-      </MenuItem>
-    </Menu>
-    <Menu pullRight>
-      <MenuItem>
-        <Link to="/styled">Styled</Link>
-      </MenuItem>
-      <MenuItem>
-        <Link to="/components">
-          <ComponentIcon />
-          Components
-        </Link>
-      </MenuItem>
-      {!isAuth && (
+const Nav = ({ isAuth, isLoggingOut, logoutRequest }) => {
+  const handleBtnLogoutClick = () => {
+    logoutRequest();
+  };
+
+  return (
+    <StyledNav>
+      <Menu>
         <MenuItem>
-          <Link to="/login">
-            <UserIcon />
-            Login
+          <Link to="/">
+            <Logo src={logo} />
+            Cubee
           </Link>
         </MenuItem>
-      )}
-      {isAuth && (
+        <Divider variant="vertical" my={3} />
         <MenuItem>
-          <Link to="#">
-            <UserIcon />
-            Logout
+          <Link to="/about">About</Link>
+        </MenuItem>
+      </Menu>
+      <Menu pullRight>
+        <MenuItem>
+          <Link to="/styled">Styled</Link>
+        </MenuItem>
+        <MenuItem>
+          <Link to="/components">
+            <ComponentIcon />
+            Components
           </Link>
         </MenuItem>
-      )}
-    </Menu>
-  </StyledNav>
-);
+        {!isAuth && (
+          <MenuItem>
+            <Link to="/login">
+              <UserIcon />
+              Login
+            </Link>
+          </MenuItem>
+        )}
+        {isAuth && (
+          <MenuItem>
+            <Link to="#" onClick={handleBtnLogoutClick}>
+              <UserIcon />
+              Logout
+              {isLoggingOut && '...'}
+            </Link>
+          </MenuItem>
+        )}
+      </Menu>
+    </StyledNav>
+  );
+};
 
 Nav.propTypes = {
+  isLoggingOut: PropTypes.bool.isRequired,
   isAuth: PropTypes.bool.isRequired,
+  logoutRequest: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuth: authSelectors.getIsAuth(state),
+  isLoggingOut: authSelectors.getIsLoggingOut(state),
 });
 
-export default connect(mapStateToProps)(
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  logoutRequest,
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(
   Nav,
 );
