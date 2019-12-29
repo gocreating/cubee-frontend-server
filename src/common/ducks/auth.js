@@ -117,7 +117,7 @@ export const sagas = {
     const { data } = res;
     yield put(setAuth(data.access_token, data.csrf_token, data.user));
   },
-  handleLoginFail(action) {
+  handleRequestFail(action) {
     const { res } = action.payload;
     if (res) {
       alert(res.data.message);
@@ -133,7 +133,7 @@ export const rootSaga = {
     yield takeEvery(LOGIN_SUCCESS, sagas.handleLoginSuccess);
   },
   *loginFail() {
-    yield takeEvery(LOGIN_FAIL, sagas.handleLoginFail);
+    yield takeEvery(LOGIN_FAIL, sagas.handleRequestFail);
   },
 };
 
