@@ -78,7 +78,7 @@ export const selectors = {
     const authUserId = this.getUserId(state);
     return Boolean(authUserId);
   },
-  getIsLoading(state) {
+  getIsLoggingIn(state) {
     return fromJS(state.auth)
       .getIn(['loginMeta', 'isRequesting']);
   },

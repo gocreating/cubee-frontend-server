@@ -24,7 +24,7 @@ class LoginPage extends Component {
   }
 
   render() {
-    const { isLoading } = this.props;
+    const { isLoggingIn } = this.props;
 
     return (
       <Container>
@@ -54,7 +54,7 @@ class LoginPage extends Component {
           <Button
             type="button"
             variant="primary"
-            disabled={isLoading}
+            disabled={isLoggingIn}
             onClick={this.handleBtnLoginClick}
           >
             Login
@@ -66,12 +66,12 @@ class LoginPage extends Component {
 }
 
 LoginPage.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
+  isLoggingIn: PropTypes.bool.isRequired,
   loginRequest: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  isLoading: authSelectors.getIsLoading(state),
+  isLoggingIn: authSelectors.getIsLoggingIn(state),
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
