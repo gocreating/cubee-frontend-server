@@ -1,13 +1,16 @@
 import path from 'path';
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import config from './config';
 import env from '../common/utils/env';
 import configureStore from './middlewares/configureStore';
-import sampleFetchState from './middlewares/sampleFetchState';
+import syncStoreWithClientSide from './middlewares/syncStoreWithClientSide';
 import getStatus from './middlewares/getStatus';
 import renderMarkup from './middlewares/renderMarkup';
 
 const server = express();
+
+server.use(cookieParser());
 
 server.get('/error', () => {
   throw new Error('error on purpose');
@@ -30,9 +33,9 @@ server.get('/config', (req, res) => {
   });
 });
 
-server.get('/*', configureStore);
+server.get('/*', configureStore, syncStoreWithClientSide);
 
-server.get('/styled', sampleFetchState, getStatus);
+server.get('/styled', getStatus);
 
 server
   .disable('x-powered-by')

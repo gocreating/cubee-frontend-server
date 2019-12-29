@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
+import { persistStore } from 'redux-persist';
 import createSagaMiddleware, { END } from 'redux-saga';
 import sagaMonitor from '@redux-saga/simple-saga-monitor';
 import { createLogger } from 'redux-logger';
@@ -31,6 +32,10 @@ const configureStore = initialState => {
     initialState,
     compose(applyMiddleware(...middlewares)),
   );
+  let persistor;
+  if (env.isBrowser) {
+    persistor = persistStore(store);
+  }
   for (let duckName in sagas) {
     const sagasOfDuck = sagas[duckName];
     for (let sagaName in sagasOfDuck) {
@@ -39,7 +44,7 @@ const configureStore = initialState => {
   }
   store.runSaga = sagaMiddleware.run;
   store.close = () => store.dispatch(END);
-  return store;
+  return { store, persistor };
 };
 
 export default configureStore;

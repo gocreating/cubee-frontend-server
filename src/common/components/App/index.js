@@ -22,6 +22,10 @@ const ComponentDemoPage = Loadable({
   loader: () => import('../../pages/ComponentDemoPage'),
   loading: () => null,
 });
+const LoginPage = Loadable({
+  loader: () => import('../../pages/LoginPage'),
+  loading: () => null,
+});
 
 const App = () => (
   <ThemeProvider theme={theme}>
@@ -39,6 +43,7 @@ const App = () => (
         <Route exact path="/about" component={AboutPage} />
         <Route exact path="/styled" component={StyledPage} />
         <Route exact path="/components" component={ComponentDemoPage} />
+        <Route exact path="/login" component={LoginPage} />
       </Switch>
     </>
   </ThemeProvider>
