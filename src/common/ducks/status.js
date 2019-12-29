@@ -1,6 +1,7 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { API_HOST } from '../config';
-import apiAgent from '../api/agent';
+import { selectors as authSelectors } from './auth';
+import apiAgent, { injectCredentials } from '../api/agent';
 
 /**
  * Actions
@@ -45,7 +46,8 @@ export const selectors = {};
 export const sagas = {
   *handleGetStatus(action) {
     try {
-      const res = yield call(apiAgent, `${API_HOST}/info`);
+      const { accessToken } = yield select(authSelectors.getUser);
+      const res = yield call(apiAgent, `${API_HOST}/users/me`, injectCredentials({}, accessToken));
       yield put(getStatusSuccess(res));
     } catch(e) {
       console.error('Error when handling action', action, '\n', e);

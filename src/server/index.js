@@ -4,7 +4,6 @@ import cookieParser from 'cookie-parser';
 import config from './config';
 import env from '../common/utils/env';
 import configureStore from './middlewares/configureStore';
-import sampleFetchState from './middlewares/sampleFetchState';
 import syncStoreWithClientSide from './middlewares/syncStoreWithClientSide';
 import getStatus from './middlewares/getStatus';
 import renderMarkup from './middlewares/renderMarkup';
@@ -36,7 +35,7 @@ server.get('/config', (req, res) => {
 
 server.get('/*', configureStore, syncStoreWithClientSide);
 
-server.get('/styled', sampleFetchState, getStatus);
+server.get('/styled', getStatus);
 
 server
   .disable('x-powered-by')
