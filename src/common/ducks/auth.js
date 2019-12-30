@@ -1,5 +1,6 @@
 import { fromJS } from 'immutable';
 import { call, put, takeEvery, all, select } from 'redux-saga/effects';
+import { push } from 'connected-react-router';
 import { API_HOST } from '../config';
 import apiAgent, { injectCredentials } from '../api/agent';
 
@@ -144,6 +145,7 @@ export const sagas = {
     const { res } = action.payload;
     const { data } = res;
     yield put(setAuth(data.access_token, data.csrf_token, data.user));
+    yield put(push('/'));
   },
   *handleLogoutRequest() {
     try {
@@ -168,6 +170,7 @@ export const sagas = {
   },
   *handleLogout() {
     yield put(clearAuth());
+    yield put(push('/'));
   },
   handleRequestFail(action) {
     const { res } = action.payload;
