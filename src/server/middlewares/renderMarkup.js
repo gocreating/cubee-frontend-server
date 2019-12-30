@@ -3,6 +3,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 import { Capture } from 'react-loadable';
 import { getBundles } from 'react-loadable/webpack';
 import { Helmet } from 'react-helmet';
@@ -13,7 +14,7 @@ import App from '../../common/components/App';
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
 const renderMarkupMiddleware = (req, res) => {
-  const { store } = res.locals;
+  const { store, history } = res.locals;
   const context = {};
   const modules = [];
   const sheet = new ServerStyleSheet();
@@ -26,9 +27,11 @@ const renderMarkupMiddleware = (req, res) => {
       sheet.collectStyles(
         <Capture report={moduleName => modules.push(moduleName)}>
           <Provider store={store}>
-            <StaticRouter context={context} location={req.url}>
-              <App />
-            </StaticRouter>
+            <ConnectedRouter history={history}>
+              <StaticRouter context={context} location={req.url}>
+                <App />
+              </StaticRouter>
+            </ConnectedRouter>
           </Provider>
         </Capture>
       )

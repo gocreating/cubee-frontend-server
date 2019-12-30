@@ -1,13 +1,15 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { persistStore } from 'redux-persist';
+import { routerMiddleware } from 'connected-react-router';
+import { createBrowserHistory, createMemoryHistory } from 'history';
 import createSagaMiddleware, { END } from 'redux-saga';
 import sagaMonitor from '@redux-saga/simple-saga-monitor';
 import { createLogger } from 'redux-logger';
 import env from '../utils/env';
-import rootReducer from '../reducers';
+import createRootReducer from '../reducers';
 import sagas from '../sagas';
 
-const configureStore = initialState => {
+const configureStore = (initialState, initialPath) => {
   const sagaMiddleware = (
     env.isProduction
       ? createSagaMiddleware()
@@ -17,18 +19,27 @@ const configureStore = initialState => {
     diff: true,
     collapsed: true,
   });
+  let history;
+  if (env.isBrowser) {
+    history = createBrowserHistory();
+  } else if (env.isServer) {
+    // set initial path on server side
+    history = createMemoryHistory({ initialEntries: [initialPath] });
+  }
   const middlewares = (
     (!env.isProduction && env.isBrowser)
     ? [
       logger,
       sagaMiddleware,
+      routerMiddleware(history),
     ]
     : [
       sagaMiddleware,
+      routerMiddleware(history),
     ]
   );
   const store = createStore(
-    rootReducer,
+    createRootReducer(history),
     initialState,
     compose(applyMiddleware(...middlewares)),
   );
@@ -44,7 +55,7 @@ const configureStore = initialState => {
   }
   store.runSaga = sagaMiddleware.run;
   store.close = () => store.dispatch(END);
-  return { store, persistor };
+  return { store, persistor, history };
 };
 
 export default configureStore;

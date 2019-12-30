@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { connectRouter } from 'connected-react-router';
 import env from '../utils/env';
 import auth from '../ducks/auth';
 import status from '../ducks/status';
@@ -18,9 +19,10 @@ if (env.isBrowser) {
   authReducer = auth;
 }
 
-const rootReducer = combineReducers({
+const createRootReducer = (history) => combineReducers({
+  router: connectRouter(history),
   auth: authReducer,
   status,
 });
 
-export default rootReducer;
+export default createRootReducer;

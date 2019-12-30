@@ -1,22 +1,25 @@
 import React from 'react';
 import { hydrate } from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 import Loadable from 'react-loadable';
 import configureStore from '../common/store/configureStore';
 import App from '../common/components/App';
 
 const preloadedState = window.__PRELOADED_STATE__;
-const { store } = configureStore(preloadedState);
+const { store, history } = configureStore(preloadedState);
 
 delete window.__PRELOADED_STATE__;
 
 Loadable.preloadReady().then(() => {
   hydrate(
     <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ConnectedRouter history={history}>
+        <Router history={history}>
+          <App />
+        </Router>
+      </ConnectedRouter>
     </Provider>,
     document.getElementById('root')
   );
