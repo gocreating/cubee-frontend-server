@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable';
-import { call, put, takeEvery, select } from 'redux-saga/effects';
+import { call, put, takeEvery, all, select } from 'redux-saga/effects';
 import { API_HOST } from '../config';
 import apiAgent, { injectCredentials } from '../api/agent';
 
@@ -166,13 +166,13 @@ export const sagas = {
       yield put(logoutFail(err));
     }
   },
-  *handleLogoutSuccess() {
+  *handleLogout() {
     yield put(clearAuth());
   },
   handleRequestFail(action) {
     const { res } = action.payload;
     if (res) {
-      alert(res.data.message);
+      alert(fromJS(res).getIn(['data', 'message'], 'Some error happened.'));
     }
   },
 };
@@ -191,10 +191,13 @@ export const rootSaga = {
     yield takeEvery(LOGOUT_REQUEST, sagas.handleLogoutRequest);
   },
   *logoutSuccess() {
-    yield takeEvery(LOGOUT_SUCCESS, sagas.handleLogoutSuccess);
+    yield takeEvery(LOGOUT_SUCCESS, sagas.handleLogout);
   },
   *logoutFail() {
-    yield takeEvery(LOGOUT_FAIL, sagas.handleRequestFail);
+    yield all([
+      takeEvery(LOGOUT_FAIL, sagas.handleLogout),
+      takeEvery(LOGOUT_FAIL, sagas.handleRequestFail),
+    ]);
   },
 };
 
