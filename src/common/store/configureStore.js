@@ -26,18 +26,24 @@ const configureStore = (initialState, initialPath) => {
     // set initial path on server side
     history = createMemoryHistory({ initialEntries: [initialPath] });
   }
-  const middlewares = (
-    (!env.isProduction && env.isBrowser)
-    ? [
+  let middlewares = [];
+  if (env.isTesting) {
+    middlewares = [
+      sagaMiddleware,
+      routerMiddleware(history),
+    ]
+  } else if (!env.isProduction && env.isBrowser) {
+    middlewares = [
       logger,
       sagaMiddleware,
       routerMiddleware(history),
     ]
-    : [
+  } else {
+    middlewares = [
       sagaMiddleware,
       routerMiddleware(history),
     ]
-  );
+  }
   const store = createStore(
     createRootReducer(history),
     initialState,
