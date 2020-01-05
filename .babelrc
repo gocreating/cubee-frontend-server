@@ -1,5 +1,5 @@
 {
-  "presets": ["razzle/babel"],
+  "presets": ["razzle/babel", "@babel/typescript"],
   "plugins": [
     "react-loadable/babel",
     ["styled-components", { "ssr": true }]

@@ -2,36 +2,19 @@ const { ReactLoadablePlugin } = require('react-loadable/webpack');
 
 module.exports = {
   modify: (config, { target }) => {
+    const newConfig = { ...config };
     if (target === 'web') {
-      return {
-        ...config,
-        plugins: [
-          ...config.plugins,
-          new ReactLoadablePlugin({
-            filename: './build/react-loadable.json',
-          }),
-        ],
-      };
+      newConfig.plugins.push(new ReactLoadablePlugin({
+        filename: './build/react-loadable.json',
+      }));
     }
 
-    return config;
+    newConfig.resolve.extensions.push('.ts', '.tsx')
+		newConfig.module.rules.push({
+			test: /\.(ts|js)x?$/,
+			exclude: /node_modules/,
+			loader: "babel-loader",
+		})
+    return newConfig;
   },
-  plugins: [
-    {
-      name: 'typescript',
-      options: {
-        useBabel: true,
-        tsLoader: {
-          transpileOnly: true,
-          experimentalWatchApi: true,
-        },
-        forkTsChecker: {
-          tsconfig: './tsconfig.json',
-          tslint: './tslint.json',
-          watch: './src',
-          typeCheck: true,
-        },
-      },
-    },
-  ],
 };

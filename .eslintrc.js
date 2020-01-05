@@ -1,12 +1,15 @@
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:compat/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   plugins: [
     'react',
+    '@typescript-eslint',
   ],
   env: {
     browser: true,
@@ -33,4 +36,7 @@ module.exports = {
       version: 'latest',
     },
   },
+  ignorePatterns: [
+    'razzle.config.js',
+  ],
 };
