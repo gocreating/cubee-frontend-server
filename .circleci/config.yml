@@ -154,10 +154,8 @@ workflows:
     jobs:
       - build_docker_image:
           filters:
-            branches:
-              only: master
             tags:
-              only: /release-.*/
+              only: /.*/
       - decrypt_secrets:
           filters:
             branches:
