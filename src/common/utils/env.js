@@ -9,6 +9,9 @@ export default {
       ? (window.CUBEE_ENV === 'staging')
       : (process.env.CUBEE_ENV === 'staging')
   ),
+  isTesting: (
+    process.env.NODE_ENV === 'test'
+  ),
   isProduction: (
     isBrowser
       ? (window.CUBEE_ENV === 'production')
