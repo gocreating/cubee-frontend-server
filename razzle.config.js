@@ -9,12 +9,12 @@ module.exports = {
       }));
     }
 
-    newConfig.resolve.extensions.push('.ts', '.tsx')
-		newConfig.module.rules.push({
-			test: /\.(ts|js)x?$/,
-			exclude: /node_modules/,
-			loader: "babel-loader",
-		})
+    newConfig.resolve.extensions.push('.ts', '.tsx');
+    newConfig.module.rules.push({
+      test: /\.(ts|js)x?$/,
+      exclude: /node_modules/,
+      loader: 'babel-loader',
+    });
     return newConfig;
   },
 };
