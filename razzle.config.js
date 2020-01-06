@@ -14,6 +14,9 @@ module.exports = {
       test: /\.(ts|js)x?$/,
       exclude: /node_modules/,
       loader: 'babel-loader',
+      // options: {
+      //   presets: ['@babel/preset-env'],
+      // },
     });
     return newConfig;
   },

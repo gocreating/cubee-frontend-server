@@ -44,6 +44,7 @@
   "dependencies": {
     "@redux-saga/simple-saga-monitor": "^1.0.2",
     "@styled-system/theme-get": "^5.1.1",
+    "babel-loader": "^8.0.4",
     "connected-react-router": "^6.6.1",
     "cookie-parser": "^1.4.4",
     "cross-fetch": "^3.0.4",

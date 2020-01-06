@@ -7,7 +7,11 @@ services:
       - "3000:3000"
     volumes:
       - ./config-prod.json:/etc/config.json
+      # - ./package.json:/srv/cubee-frontend-server/package.json
+      # - ./yarn.lock:/srv/cubee-frontend-server/yarn.lock
+      # - /c/projects/cubee/cubee-frontend-server/fuck:/srv/cubee-frontend-server
     environment:
+      - NODE_ENV=production
       - CUBEE_ENV=production
     entrypoint: yarn
     command: "start:pm2"
