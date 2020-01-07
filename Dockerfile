@@ -9,7 +9,7 @@ COPY package*.json ./
 # COPY yarn.lock ./
 
 RUN apk update && \
-    npm install && \
+    yarn && \
     rm -rf /var/cache/apk/*
 
 COPY . /srv/cubee-frontend-server
