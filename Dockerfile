@@ -6,7 +6,7 @@ ARG BUILD_DATE
 ARG IMAGE_TAG
 
 COPY package*.json ./
-# COPY yarn.lock ./
+COPY yarn.lock ./
 
 RUN apk update && \
     yarn && \
@@ -18,7 +18,8 @@ WORKDIR /srv/cubee-frontend-server
 
 # We manually install `babel-loader` here to make razzle.config.js correctly load typescript through `babel-loader`
 # since it somehow doesn't work if we specify `babel-loader` in either package.json or yarn.lock
-RUN npm install -g razzle pm2 && \
+RUN yarn global add pm2 && \
+    yarn add razzle --force && \
     # yarn add -D babel-loader && \
     yarn run build
 
