@@ -20,7 +20,7 @@ WORKDIR /srv/cubee-frontend-server
 # since it somehow doesn't work if we specify `babel-loader` in either package.json or yarn.lock
 RUN npm install -g razzle pm2 && \
     # yarn add -D babel-loader && \
-    npm run build
+    yarn run build
 
 ENV repoName=${PROJECT_REPONAME} \
     commitSHA1=${SHA1} \
