@@ -52,6 +52,20 @@ commands:
             helm ls
 
 jobs:
+  commit_test:
+    docker:
+      - image: node:8.16.0-alpine
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            yarn
+      - run:
+          name: Type Checking
+          command: |
+            yarn tsc
+
   build_docker_image:
     docker:
       - image: google/cloud-sdk
@@ -152,7 +166,13 @@ workflows:
   version: 2
   build_image_and_deploy:
     jobs:
+      - commit_test:
+          filters:
+            tags:
+              only: /.*/
       - build_docker_image:
+          requires:
+            - commit_test
           filters:
             tags:
               only: /.*/

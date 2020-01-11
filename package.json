@@ -39,7 +39,7 @@
     "start:prod": "NODE_ENV=production node build/server.js",
     "start:pm2": "NODE_ENV=production pm2-runtime build/server.js",
     "lint": "eslint ./src --config ./.eslintrc.js",
-    "tsc": "tsc --watch"
+    "tsc": "tsc"
   },
   "dependencies": {
     "@redux-saga/simple-saga-monitor": "^1.0.2",
