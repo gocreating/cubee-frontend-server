@@ -8,6 +8,7 @@ services:
     volumes:
       - ./config-prod.json:/etc/config.json
     environment:
+      - NODE_ENV=production
       - CUBEE_ENV=production
     entrypoint: yarn
     command: "start:pm2"

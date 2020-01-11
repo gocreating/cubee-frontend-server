@@ -18,9 +18,9 @@ WORKDIR /srv/cubee-frontend-server
 
 # We manually install `babel-loader` here to make razzle.config.js correctly load typescript through `babel-loader`
 # since it somehow doesn't work if we specify `babel-loader` in either package.json or yarn.lock
-RUN yarn global add razzle pm2 && \
-    yarn add -D babel-loader && \
-    yarn build
+RUN yarn global add pm2 && \
+    yarn add razzle --force && \
+    yarn run build
 
 ENV repoName=${PROJECT_REPONAME} \
     commitSHA1=${SHA1} \
