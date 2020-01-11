@@ -16,7 +16,7 @@ server.get('/error', () => {
   throw new Error('error on purpose');
 });
 
-server.get('/info', (req, res) => {
+server.get('/info', (_req, res) => {
   res.json({
     repoName: process.env.repoName,
     commitSHA1: process.env.commitSHA1,
