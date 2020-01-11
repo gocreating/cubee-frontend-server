@@ -2,6 +2,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { persistStore } from 'redux-persist';
 import { routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory, createMemoryHistory } from 'history';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware, { END } from 'redux-saga';
 import sagaMonitor from '@redux-saga/simple-saga-monitor';
 import { createLogger } from 'redux-logger';
@@ -26,28 +27,34 @@ const configureStore = (initialState, initialPath) => {
     // set initial path on server side
     history = createMemoryHistory({ initialEntries: [initialPath] });
   }
-  let middlewares = [];
+  let enhancer;
   if (env.isTesting) {
-    middlewares = [
+    const middlewares = [
       sagaMiddleware,
       routerMiddleware(history),
-    ]
+    ];
+    enhancer = compose(applyMiddleware(...middlewares));
   } else if (!env.isProduction && env.isBrowser) {
-    middlewares = [
+    const middlewares = [
       logger,
       sagaMiddleware,
       routerMiddleware(history),
-    ]
+    ];
+    const composeEnhancers = composeWithDevTools({
+      trace: true,
+    });
+    enhancer = composeEnhancers(applyMiddleware(...middlewares));
   } else {
-    middlewares = [
+    const middlewares = [
       sagaMiddleware,
       routerMiddleware(history),
-    ]
+    ];
+    enhancer = compose(applyMiddleware(...middlewares));
   }
   const store = createStore(
     createRootReducer(history),
     initialState,
-    compose(applyMiddleware(...middlewares)),
+    enhancer,
   );
   let persistor;
   if (env.isBrowser) {
