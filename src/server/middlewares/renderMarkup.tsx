@@ -1,3 +1,5 @@
+import { RequestHandler } from 'express';
+import { StaticRouterContext } from 'react-router';
 import serialize from 'serialize-javascript';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
@@ -5,18 +7,19 @@ import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 import { Capture } from 'react-loadable';
-import { getBundles } from 'react-loadable/webpack';
+import { getBundles, Manifest } from 'react-loadable/webpack';
 import { Helmet } from 'react-helmet';
 import { ServerStyleSheet } from 'styled-components';
 import stats from '../../../build/react-loadable.json';
 import App from '../../common/components/App';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
-const renderMarkupMiddleware = (req, res) => {
+const renderMarkupMiddleware: RequestHandler = (req, res) => {
   const { store, history } = res.locals;
-  const context = {};
-  const modules = [];
+  const context: StaticRouterContext = {};
+  const modules: string[] = [];
   const sheet = new ServerStyleSheet();
 
   let markup = '';
@@ -25,7 +28,7 @@ const renderMarkupMiddleware = (req, res) => {
   try {
     markup = renderToString(
       sheet.collectStyles(
-        <Capture report={moduleName => modules.push(moduleName)}>
+        <Capture report={(moduleName): number => modules.push(moduleName)}>
           <Provider store={store}>
             <ConnectedRouter history={history}>
               <StaticRouter context={context} location={req.url}>
@@ -33,8 +36,8 @@ const renderMarkupMiddleware = (req, res) => {
               </StaticRouter>
             </ConnectedRouter>
           </Provider>
-        </Capture>
-      )
+        </Capture>,
+      ),
     );
     styleTags = sheet.getStyleTags();
     store.close();
@@ -47,7 +50,7 @@ const renderMarkupMiddleware = (req, res) => {
   if (context.url) {
     res.redirect(context.url);
   } else {
-    const bundles = getBundles(stats, modules);
+    const bundles = getBundles(stats as Manifest, modules);
     const chunks = bundles.filter(bundle => bundle.file.endsWith('.js'));
     const styles = bundles.filter(bundle => bundle.file.endsWith('.css'));
     const helmet = Helmet.renderStatic();
@@ -79,15 +82,14 @@ const renderMarkupMiddleware = (req, res) => {
   }
   ${
     chunks
-      .map(
-        chunk =>
-          process.env.NODE_ENV === 'production'
-            ? `<script src="/${chunk.file}"></script>`
-            : `<script src="http://${process.env.HOST}:${parseInt(
-                process.env.PORT,
-                10
-              ) + 1}/${chunk.file}"></script>`
-      )
+      .map(chunk => (
+        process.env.NODE_ENV === 'production'
+          ? `<script src="/${chunk.file}"></script>`
+          : `<script src="http://${process.env.HOST}:${parseInt(
+              process.env.PORT,
+              10,
+            ) + 1}/${chunk.file}"></script>`
+      ))
       .join('\n')
   }
   ${styleTags}
@@ -99,7 +101,7 @@ const renderMarkupMiddleware = (req, res) => {
     window.__PRELOADED_STATE__ = ${serialize(finalState)}
   </script>
 </body>
-</html>`
+</html>`,
     );
   }
 };

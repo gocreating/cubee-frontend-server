@@ -1,6 +1,8 @@
 declare namespace NodeJS {
   export interface ProcessEnv {
     RAZZLE_PUBLIC_DIR: string;
+    RAZZLE_ASSETS_MANIFEST: string;
+    PORT: string;
     CONFIG_PATH?: string;
   }
 }
