@@ -8,13 +8,13 @@ const server = http.createServer(app);
 let currentApp = app;
 
 Loadable.preloadAll().then(() => {
-  server.listen(process.env.PORT || 3000, error => {
-    if (error) {
+  server
+    .listen(parseInt(process.env.PORT, 10) || 3000, () => {
+      console.log('🚀 started');
+    })
+    .on('error', error => {
       console.log(error);
-    }
-
-    console.log('🚀 started');
-  });
+    });
 });
 
 if (module.hot) {
