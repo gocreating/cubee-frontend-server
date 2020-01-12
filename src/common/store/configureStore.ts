@@ -1,3 +1,5 @@
+import { ConfiguredStore } from 'cubee-server';
+import { History } from 'history';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { persistStore } from 'redux-persist';
 import { routerMiddleware } from 'connected-react-router';
@@ -10,7 +12,7 @@ import env from '../utils/env';
 import createRootReducer from '../reducers';
 import sagas from '../sagas';
 
-const configureStore = (initialState, initialPath) => {
+const configureStore = (initialState: object, initialPath?: string): ConfiguredStore => {
   const sagaMiddleware = (
     env.isProduction
       ? createSagaMiddleware()
@@ -25,20 +27,20 @@ const configureStore = (initialState, initialPath) => {
     history = createBrowserHistory();
   } else if (env.isServer) {
     // set initial path on server side
-    history = createMemoryHistory({ initialEntries: [initialPath] });
+    history = createMemoryHistory({ initialEntries: [initialPath as string] });
   }
   let enhancer;
   if (env.isTesting) {
     const middlewares = [
       sagaMiddleware,
-      routerMiddleware(history),
+      routerMiddleware(history as History),
     ];
     enhancer = compose(applyMiddleware(...middlewares));
   } else if (!env.isProduction && env.isBrowser) {
     const middlewares = [
       logger,
       sagaMiddleware,
-      routerMiddleware(history),
+      routerMiddleware(history as History),
     ];
     const composeEnhancers = composeWithDevTools({
       trace: true,
@@ -47,7 +49,7 @@ const configureStore = (initialState, initialPath) => {
   } else {
     const middlewares = [
       sagaMiddleware,
-      routerMiddleware(history),
+      routerMiddleware(history as History),
     ];
     enhancer = compose(applyMiddleware(...middlewares));
   }
@@ -60,14 +62,14 @@ const configureStore = (initialState, initialPath) => {
   if (env.isBrowser) {
     persistor = persistStore(store);
   }
-  for (let duckName in sagas) {
+  for (const duckName in sagas) {
     const sagasOfDuck = sagas[duckName];
-    for (let sagaName in sagasOfDuck) {
+    for (const sagaName in sagasOfDuck) {
       sagaMiddleware.run(sagasOfDuck[sagaName]);
     }
   }
   store.runSaga = sagaMiddleware.run;
-  store.close = () => store.dispatch(END);
+  store.close = (): END => store.dispatch(END);
   return { store, persistor, history };
 };
 

@@ -1,3 +1,4 @@
+import { History } from 'history';
 import React from 'react';
 import { hydrate } from 'react-dom';
 import { Provider } from 'react-redux';
@@ -15,13 +16,13 @@ delete window.__PRELOADED_STATE__;
 Loadable.preloadReady().then(() => {
   hydrate(
     <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <Router history={history}>
+      <ConnectedRouter history={history as History}>
+        <Router history={history as History}>
           <App />
         </Router>
       </ConnectedRouter>
     </Provider>,
-    document.getElementById('root')
+    document.getElementById('root'),
   );
 });
 
