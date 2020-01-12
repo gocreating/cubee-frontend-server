@@ -1,7 +1,8 @@
+import { RequestHandler } from 'express';
 import { race, take } from 'redux-saga/effects';
 import { getStatus, GET_STATUS_SUCCESS, GET_STATUS_FAIL } from '../../common/ducks/status';
 
-const getStatusMiddleware = (req, res, next) => {
+const getStatusMiddleware: RequestHandler = (_req, res, next) => {
   const { store } = res.locals;
   store.runSaga(function*() {
     yield race([
