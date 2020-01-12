@@ -10,4 +10,9 @@ declare module "cubee-server" {
     secretFoo: string;
     secretBar: string;
   }
+
+  export interface RequestCookie {
+    access_token_cookie?: string;
+    csrf_access_token?: string;
+  }
 }
