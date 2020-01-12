@@ -62,6 +62,11 @@ jobs:
           command: |
             yarn
       - run:
+          name: Build build/react-loadable.json
+          command: |
+            yarn add razzle --force
+            yarn run build
+      - run:
           name: Type Checking
           command: |
             yarn tsc
