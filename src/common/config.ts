@@ -1,11 +1,11 @@
 import env from './utils/env';
 
-let apiHost;
+let apiHost: string;
 
-if (env.isStaging) {
-  apiHost = 'https://api.stg.cubee.cc';
-} else if (env.isProduction) {
+if (env.isProduction) {
   apiHost = 'https://api.cubee.cc';
+} else {
+  apiHost = 'https://api.stg.cubee.cc';
 }
 
 export const API_HOST = apiHost;
