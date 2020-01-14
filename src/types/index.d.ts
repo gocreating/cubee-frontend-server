@@ -9,6 +9,7 @@ declare namespace NodeJS {
 
 interface Window {
   __PRELOADED_STATE__: object;
+  CUBEE_ENV: 'staging' | 'production';
 }
 
 declare module 'cubee' {}

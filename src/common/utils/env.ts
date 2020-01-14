@@ -1,7 +1,8 @@
+import { ApplicationEnvironment } from 'cubee';
+
 const isServer = (typeof window === 'undefined');
 const isBrowser = !isServer;
-
-export default {
+const env: ApplicationEnvironment = {
   isServer,
   isBrowser,
   isStaging: (
@@ -18,3 +19,5 @@ export default {
       : (process.env.CUBEE_ENV === 'production')
   ),
 };
+
+export default env;

@@ -8,6 +8,14 @@ declare module 'cubee' {
     secretBar: string;
   }
 
+  export interface ApplicationEnvironment {
+    isServer: boolean;
+    isBrowser: boolean;
+    isStaging: boolean;
+    isTesting: boolean;
+    isProduction: boolean;
+  }
+
   export interface RequestCookie {
     access_token_cookie?: string;
     csrf_access_token?: string;
