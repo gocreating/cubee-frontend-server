@@ -1,3 +1,4 @@
+import { Response } from 'cubee';
 import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { API_HOST } from '../config';
 import { selectors as authSelectors } from './auth';
@@ -13,24 +14,24 @@ export const GET_STATUS_FAIL = 'GET_STATUS_FAIL';
 /**
  * Action Creators
  */
-export const getStatus = () => ({
+export const getStatus = (): StatusActions => ({
   type: GET_STATUS,
 });
 
-export const getStatusSuccess = (data) => ({
+export const getStatusSuccess = (res: Response): StatusActions => ({
   type: GET_STATUS_SUCCESS,
-  payload: { data },
+  payload: { res },
 });
 
-export const getStatusFail = (err, res) => ({
+export const getStatusFail = (error: Error, res?: Response): StatusActions => ({
   type: GET_STATUS_FAIL,
-  payload: { err, res },
+  payload: { error, res },
 });
 
 /**
  * Default State
  */
-const defaultState = {
+const defaultState: StatusState = {
   isFetching: false,
   error: null,
 };
@@ -44,12 +45,12 @@ export const selectors = {};
  * Sagas
  */
 export const sagas = {
-  *handleGetStatus(action) {
+  *handleGetStatus(action: StatusActions) {
     try {
       const { accessToken } = yield select(authSelectors.getUser);
       const res = yield call(apiAgent, `${API_HOST}/users/me`, injectCredentials({}, accessToken));
       yield put(getStatusSuccess(res));
-    } catch(e) {
+    } catch (e) {
       console.error('Error when handling action', action, '\n', e);
       yield put(getStatusFail(e));
     }
@@ -65,7 +66,7 @@ export const rootSaga = {
 /**
  * Reducer
  */
-export default (state = defaultState, action) => {
+export default (state = defaultState, action: StatusActions): StatusState => {
   switch (action.type) {
     case GET_STATUS: {
       return {
@@ -77,7 +78,7 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         isFetching: false,
-        ...action.payload.data,
+        ...action.payload.res,
       };
     case GET_STATUS_FAIL:
       return {
@@ -89,3 +90,36 @@ export default (state = defaultState, action) => {
       return state;
   }
 };
+
+/**
+ * Types
+ */
+interface GetStatusAction {
+  type: typeof GET_STATUS;
+}
+
+interface GetStatusSuccessAction {
+  type: typeof GET_STATUS_SUCCESS;
+  payload: {
+    res: Response;
+  };
+}
+
+interface GetStatusFailAction {
+  type: typeof GET_STATUS_FAIL;
+  payload: {
+    error: Error;
+    res?: Response;
+  };
+}
+
+export type StatusActions = (
+  GetStatusAction |
+  GetStatusSuccessAction |
+  GetStatusFailAction
+);
+
+export interface StatusState {
+  isFetching: boolean;
+  error: Error | null;
+}
