@@ -30,6 +30,12 @@ module.exports = {
     'array-element-newline': ['error', 'consistent'],
     'array-bracket-newline': ['error', 'consistent'],
     'react/display-name': [0],
+    "@typescript-eslint/explicit-function-return-type": [
+      'warn', {
+        allowExpressions: true,
+        allowTypedFunctionExpressions: true,
+      }
+    ],
   },
   settings: {
     react: {
