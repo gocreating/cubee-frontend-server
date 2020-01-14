@@ -1,4 +1,4 @@
-import { ConfiguredStore } from 'cubee-server';
+import { ConfiguredStore } from 'cubee';
 import { History } from 'history';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { persistStore } from 'redux-persist';

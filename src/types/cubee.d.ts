@@ -2,7 +2,7 @@ import { Store } from 'redux';
 import { Persistor } from 'redux-persist';
 import { History } from 'history';
 
-declare module "cubee-server" {
+declare module 'cubee' {
   export interface ApplicationConfig {
     secretFoo: string;
     secretBar: string;

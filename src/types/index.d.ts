@@ -11,5 +11,5 @@ interface Window {
   __PRELOADED_STATE__: object;
 }
 
-declare module 'cubee-server' {}
+declare module 'cubee' {}
 declare module "@redux-saga/simple-saga-monitor" {}

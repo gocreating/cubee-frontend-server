@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { RequestCookie } from 'cubee-server';
+import { RequestCookie } from 'cubee';
 import jwtDecode from 'jwt-decode';
 import { setAuth } from '../../common/ducks/auth';
 
