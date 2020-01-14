@@ -1,14 +1,8 @@
+import { Response } from 'cubee';
 import fetch from 'cross-fetch';
 import { fromJS } from 'immutable';
 
-interface Response {
-  code: number;
-  data: {
-    message?: string;
-  };
-}
-
-type agent<Response> = (input: RequestInfo, init?: RequestInit) => Promise<Response>;
+type agent<T> = (input: RequestInfo, init?: RequestInit) => Promise<T>;
 type injectCredentials = (fetchOptions: RequestInit, accessToken?: string) => RequestInit;
 
 export const injectCredentials: injectCredentials = (fetchOptions = {}, accessToken) => {

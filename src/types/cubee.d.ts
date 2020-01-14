@@ -26,4 +26,11 @@ declare module 'cubee' {
     persistor?: Persistor;
     history?: History;
   }
+
+  export interface Response {
+    code: number;
+    data: {
+      message?: string;
+    };
+  }
 }
