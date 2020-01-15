@@ -62,6 +62,10 @@ jobs:
           command: |
             yarn
       - run:
+          name: Lint
+          command: |
+            yarn lint
+      - run:
           name: Build build/react-loadable.json
           command: |
             yarn add razzle --force
