@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import configureStore from '../../store/configureStore';
 import App from './index';
 
-const { store, history } = configureStore({}, '/');
+const { store } = configureStore({}, '/');
 
 describe('<App />', () => {
   test('renders without exploding', () => {
@@ -16,7 +16,7 @@ describe('<App />', () => {
           <App />
         </MemoryRouter>
       </Provider>,
-      div
+      div,
     );
   });
 });
