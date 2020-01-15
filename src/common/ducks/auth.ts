@@ -1,9 +1,15 @@
+import {
+  Response,
+  ApiSuccessActionPayload,
+  ApiFailActionPayload,
+  ApiMeta,
+} from 'cubee';
 import { fromJS } from 'immutable';
 import { call, put, takeEvery, all, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import { API_HOST } from '../config';
 import apiAgent, { injectCredentials } from '../api/agent';
-
+import { State } from '../reducers/index';
 /**
  * Actions
  */
@@ -21,40 +27,40 @@ const CLEAR_AUTH = 'CLEAR_AUTH';
 /**
  * Action Creators
  */
-export const setAuth = (accessToken, csrfToken, user) => ({
+export const setAuth = (accessToken: string, csrfToken: string, user: User): AuthActions => ({
   type: SET_AUTH,
   payload: { accessToken, csrfToken, user },
 });
 
-export const clearAuth = () => ({
+export const clearAuth = (): AuthActions => ({
   type: CLEAR_AUTH,
 });
 
-export const loginRequest = (username, password) => ({
+export const loginRequest = (username: string, password: string): AuthActions => ({
   type: LOGIN_REQUEST,
   payload: { username, password },
 });
 
-export const loginSuccess = (res) => ({
+export const loginSuccess = (res: Response<LoginResponseData>): AuthActions => ({
   type: LOGIN_SUCCESS,
   payload: { res },
 });
 
-export const loginFail = (error, res) => ({
+export const loginFail = (error: Error, res?: Response): AuthActions => ({
   type: LOGIN_FAIL,
   payload: { error, res },
 });
 
-export const logoutRequest = () => ({
+export const logoutRequest = (): AuthActions => ({
   type: LOGOUT_REQUEST,
 });
 
-export const logoutSuccess = (res) => ({
+export const logoutSuccess = (res: Response): AuthActions => ({
   type: LOGOUT_SUCCESS,
   payload: { res },
 });
 
-export const logoutFail = (error, res) => ({
+export const logoutFail = (error: Error, res?: Response): AuthActions => ({
   type: LOGOUT_FAIL,
   payload: { error, res },
 });
@@ -62,7 +68,7 @@ export const logoutFail = (error, res) => ({
 /**
  * Default State
  */
-const defaultState = {
+const defaultState: AuthState = {
   loginMeta: {
     isRequesting: false,
     isRequested: false,
@@ -83,31 +89,31 @@ const defaultState = {
  * Selectors
  */
 export const selectors = {
-  getUserId(state) {
+  getUserId(state: State) {
     const authUserId = fromJS(state.auth)
       .get('authUserId');
     return authUserId ? `${authUserId}` : null;
   },
-  getUser(state) {
+  getUser(state: State) {
     const authUserId = selectors.getUserId(state);
     return fromJS(state.auth)
       .getIn(['users', authUserId], fromJS({}))
       .toJS();
   },
-  getUsers(state) {
+  getUsers(state: State) {
     return fromJS(state.auth)
       .get('users')
       .toJS();
   },
-  getIsAuth(state) {
+  getIsAuth(state: State) {
     const authUserId = this.getUserId(state);
     return Boolean(authUserId);
   },
-  getIsLoggingIn(state) {
+  getIsLoggingIn(state: State) {
     return fromJS(state.auth)
       .getIn(['loginMeta', 'isRequesting']);
   },
-  getIsLoggingOut(state) {
+  getIsLoggingOut(state: State) {
     return fromJS(state.auth)
       .getIn(['logoutMeta', 'isRequesting']);
   },
@@ -117,7 +123,7 @@ export const selectors = {
  * Sagas
  */
 export const sagas = {
-  *handleLoginRequest(action) {
+  *handleLoginRequest(action: LoginRequestAction) {
     try {
       const { payload } = action;
       const res = yield call(apiAgent, `${API_HOST}/auth/login`, {
@@ -133,7 +139,7 @@ export const sagas = {
         }),
       });
       if (res.code !== 200) {
-        yield put(loginFail(null, res));
+        yield put(loginFail(new Error('Login fail'), res));
       } else {
         yield put(loginSuccess(res));
       }
@@ -141,7 +147,7 @@ export const sagas = {
       yield put(loginFail(err));
     }
   },
-  *handleLoginSuccess(action) {
+  *handleLoginSuccess(action: LoginSuccessAction) {
     const { res } = action.payload;
     const { data } = res;
     yield put(setAuth(data.access_token, data.csrf_token, data.user));
@@ -160,7 +166,7 @@ export const sagas = {
         credentials: 'include',
       }, accessToken));
       if (res.code !== 200) {
-        yield put(logoutFail(null, res));
+        yield put(logoutFail(new Error('Logout fail'), res));
       } else {
         yield put(logoutSuccess(res));
       }
@@ -172,7 +178,7 @@ export const sagas = {
     yield put(clearAuth());
     yield put(push('/'));
   },
-  handleRequestFail(action) {
+  handleRequestFail(action: LoginFailAction | LogoutFailAction) {
     const { res } = action.payload;
     if (res) {
       alert(fromJS(res).getIn(['data', 'message'], 'Some error happened.'));
@@ -207,7 +213,7 @@ export const rootSaga = {
 /**
  * Reducer
  */
-export default (state = defaultState, action) => {
+export default (state = defaultState, action: AuthActions): AuthState=> {
   switch (action.type) {
     case LOGIN_REQUEST:
       return fromJS(state)
@@ -263,3 +269,84 @@ export default (state = defaultState, action) => {
       return state;
   }
 };
+
+/**
+ * Types
+ */
+interface User {
+  id: number;
+  username: string;
+}
+
+interface LoginResponseData {
+  access_token: string;
+  csrf_token: string;
+  user: User;
+}
+
+interface SetAuthAction {
+  type: typeof SET_AUTH;
+  payload: {
+    accessToken: string;
+    csrfToken: string;
+    user: User;
+  };
+}
+
+interface ClearAuthAction {
+  type: typeof CLEAR_AUTH;
+}
+
+interface LoginRequestAction {
+  type: typeof LOGIN_REQUEST;
+  payload: {
+    username: string;
+    password: string;
+  };
+}
+
+interface LoginSuccessAction {
+  type: typeof LOGIN_SUCCESS;
+  payload: ApiSuccessActionPayload<{
+    data: LoginResponseData;
+  }>;
+}
+
+interface LoginFailAction {
+  type: typeof LOGIN_FAIL;
+  payload: ApiFailActionPayload;
+}
+
+interface LogoutRequestAction {
+  type: typeof LOGOUT_REQUEST;
+}
+
+interface LogoutSuccessAction {
+  type: typeof LOGOUT_SUCCESS;
+  payload: ApiSuccessActionPayload;
+}
+
+interface LogoutFailAction {
+  type: typeof LOGOUT_FAIL;
+  payload: ApiFailActionPayload;
+}
+
+export type AuthActions = (
+  SetAuthAction |
+  ClearAuthAction |
+  LoginRequestAction |
+  LoginSuccessAction |
+  LoginFailAction |
+  LogoutRequestAction |
+  LogoutSuccessAction |
+  LogoutFailAction
+);
+
+export interface AuthState {
+  loginMeta: ApiMeta;
+  logoutMeta: ApiMeta;
+  authUserId: string | null;
+  users: {
+    [id: string]: User;
+  };
+}

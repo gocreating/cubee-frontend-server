@@ -40,4 +40,11 @@ declare module 'cubee' {
     error: Error;
     res?: Response;
   }
+
+  export interface ApiMeta {
+    isRequesting: boolean;
+    isRequested: boolean;
+    isRequestSuccess: boolean;
+    isRequestFail: boolean;
+  }
 }
