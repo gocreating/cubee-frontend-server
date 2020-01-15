@@ -27,10 +27,17 @@ declare module 'cubee' {
     history?: History;
   }
 
-  export interface Response {
+  export interface Response<T = { message?: string }> {
     code: number;
-    data: {
-      message?: string;
-    };
+    data: T;
+  }
+
+  export interface ApiSuccessActionPayload<T = Response> {
+    res: T;
+  }
+
+  export interface ApiFailActionPayload {
+    error: Error;
+    res?: Response;
   }
 }

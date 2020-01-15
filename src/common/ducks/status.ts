@@ -1,4 +1,8 @@
-import { Response } from 'cubee';
+import {
+  Response,
+  ApiSuccessActionPayload,
+  ApiFailActionPayload,
+} from 'cubee';
 import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { API_HOST } from '../config';
 import { selectors as authSelectors } from './auth';
@@ -100,17 +104,12 @@ interface GetStatusAction {
 
 interface GetStatusSuccessAction {
   type: typeof GET_STATUS_SUCCESS;
-  payload: {
-    res: Response;
-  };
+  payload: ApiSuccessActionPayload;
 }
 
 interface GetStatusFailAction {
   type: typeof GET_STATUS_FAIL;
-  payload: {
-    error: Error;
-    res?: Response;
-  };
+  payload: ApiFailActionPayload;
 }
 
 export type StatusActions = (
