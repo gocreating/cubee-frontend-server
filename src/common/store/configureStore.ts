@@ -22,10 +22,10 @@ const configureStore = (initialState: object, initialPath?: string): ConfiguredS
     diff: true,
     collapsed: true,
   });
-  let history;
+  let history: History;
   if (env.isBrowser) {
     history = createBrowserHistory();
-  } else if (env.isServer) {
+  } else {
     // set initial path on server side
     history = createMemoryHistory({ initialEntries: [initialPath as string] });
   }
@@ -33,14 +33,14 @@ const configureStore = (initialState: object, initialPath?: string): ConfiguredS
   if (env.isTesting) {
     const middlewares = [
       sagaMiddleware,
-      routerMiddleware(history as History),
+      routerMiddleware(history),
     ];
     enhancer = compose(applyMiddleware(...middlewares));
   } else if (!env.isProduction && env.isBrowser) {
     const middlewares = [
       logger,
       sagaMiddleware,
-      routerMiddleware(history as History),
+      routerMiddleware(history),
     ];
     const composeEnhancers = composeWithDevTools({
       trace: true,
@@ -49,7 +49,7 @@ const configureStore = (initialState: object, initialPath?: string): ConfiguredS
   } else {
     const middlewares = [
       sagaMiddleware,
-      routerMiddleware(history as History),
+      routerMiddleware(history),
     ];
     enhancer = compose(applyMiddleware(...middlewares));
   }
