@@ -13,4 +13,4 @@ interface Window {
 }
 
 declare module 'cubee' {}
-declare module "@redux-saga/simple-saga-monitor" {}
+declare module '@redux-saga/simple-saga-monitor' {}

@@ -1,10 +1,18 @@
 import { createGlobalStyle } from 'styled-components';
 import themeGet from '@styled-system/theme-get';
 
-const htmlFontSize = 16;
-const pxToRem = (size) => `${size / htmlFontSize}rem`;
+interface FontSizes extends Array<string> {
+  body?: string;
+}
 
-const fontSizes = [
+interface Spaces extends Array<number> {
+  unit?: number;
+}
+
+const htmlFontSize = 16;
+const pxToRem = (size: number): string => `${size / htmlFontSize}rem`;
+
+const fontSizes: FontSizes = [
   pxToRem(12),
   pxToRem(16),
   pxToRem(20),
@@ -14,7 +22,7 @@ const fontSizes = [
 ];
 fontSizes.body = fontSizes[1];
 
-const space = [0, 4, 8, 16, 24, 32, 40, 48];
+const space: Spaces = [0, 4, 8, 16, 24, 32, 40, 48];
 space.unit = space[2];
 
 export default {
@@ -47,7 +55,7 @@ export default {
     fontSizeH5: pxToRem(20),
     fontSizeH6: pxToRem(16),
     fontSize: pxToRem(16),
-    fontSize_1: pxToRem(12),
+    fontSizeL1: pxToRem(12),
   },
   spacing: {
     unit: 8,
