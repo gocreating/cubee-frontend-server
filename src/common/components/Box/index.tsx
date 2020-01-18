@@ -8,7 +8,12 @@ import {
   color,
 } from 'styled-system';
 
-const Box = styled.div(
+interface Props {
+  fontFamily: string;
+  fontSize: string;
+}
+
+const Box = styled.div<Props>(
   {
     boxSizing: 'border-box',
     minWidth: 0,
