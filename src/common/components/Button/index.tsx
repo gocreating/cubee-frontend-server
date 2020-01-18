@@ -3,12 +3,16 @@ import { variant } from 'styled-system';
 import themeGet from '@styled-system/theme-get';
 import Box from '../Box';
 
+interface Props {
+  bg: string;
+}
+
 const StyledButton = styled(Box).attrs({
   as: 'button',
   px: 3,
   py: 2,
   borderRadius: 1,
-})`
+})<Props>`
   outline: none;
   border: none;
   cursor: pointer;
