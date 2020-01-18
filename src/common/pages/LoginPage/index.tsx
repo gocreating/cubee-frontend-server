@@ -15,10 +15,16 @@ import {
 } from '../../ducks/auth';
 import { RootState, RootAction } from '../../reducers';
 
-interface Props {
-  isLoggingIn: boolean;
-  loginRequest: typeof loginRequest;
-}
+const mapStateToProps = (state: RootState) => ({
+  isLoggingIn: authSelectors.getIsLoggingIn(state),
+});
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreators<any, any>({
+  loginRequest,
+}, dispatch);
+
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 
 class LoginPage extends Component<Props> {
   static propTypes = {
@@ -76,14 +82,6 @@ class LoginPage extends Component<Props> {
     );
   }
 }
-
-const mapStateToProps = (state: RootState) => ({
-  isLoggingIn: authSelectors.getIsLoggingIn(state),
-});
-
-const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreators({
-  loginRequest,
-}, dispatch);
 
 export default withLayout<Props>({ nav: true })(
   connect(mapStateToProps, mapDispatchToProps)(
