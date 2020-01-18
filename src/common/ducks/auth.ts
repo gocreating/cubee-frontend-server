@@ -9,7 +9,8 @@ import { call, put, takeEvery, all, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import { API_HOST } from '../config';
 import apiAgent, { injectCredentials } from '../api/agent';
-import { State } from '../reducers/index';
+import { RootState } from '../reducers/index';
+
 /**
  * Actions
  */
@@ -89,31 +90,31 @@ const defaultState: AuthState = {
  * Selectors
  */
 export const selectors = {
-  getUserId(state: State) {
+  getUserId(state: RootState) {
     const authUserId = fromJS(state.auth)
       .get('authUserId');
     return authUserId ? `${authUserId}` : null;
   },
-  getUser(state: State) {
+  getUser(state: RootState) {
     const authUserId = selectors.getUserId(state);
     return fromJS(state.auth)
       .getIn(['users', authUserId], fromJS({}))
       .toJS();
   },
-  getUsers(state: State) {
+  getUsers(state: RootState) {
     return fromJS(state.auth)
       .get('users')
       .toJS();
   },
-  getIsAuth(state: State) {
+  getIsAuth(state: RootState) {
     const authUserId = this.getUserId(state);
     return Boolean(authUserId);
   },
-  getIsLoggingIn(state: State) {
+  getIsLoggingIn(state: RootState) {
     return fromJS(state.auth)
       .getIn(['loginMeta', 'isRequesting']);
   },
-  getIsLoggingOut(state: State) {
+  getIsLoggingOut(state: RootState) {
     return fromJS(state.auth)
       .getIn(['logoutMeta', 'isRequesting']);
   },

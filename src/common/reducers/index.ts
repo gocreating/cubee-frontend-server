@@ -27,7 +27,7 @@ const createRootReducer = (history: History): Reducer => combineReducers({
   status: statusReducer,
 });
 
-export interface State {
+export interface RootState {
   router: RouterState;
   auth: AuthState;
   status: StatusState;
