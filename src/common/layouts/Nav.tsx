@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { typography } from 'styled-system';
@@ -12,8 +12,19 @@ import {
   logoutRequest,
   selectors as authSelectors,
 } from '../ducks/auth';
+import { RootState, RootAction } from '../reducers';
 import Divider from '../components/Divider';
 import logo from '../../../public/logo.svg';
+
+interface MenuProps {
+  pullRight?: boolean;
+}
+
+interface Props {
+  isLoggingOut: boolean;
+  isAuth: boolean;
+  logoutRequest: () => void;
+}
 
 const StyledNav = styled.nav`
   display: flex;
@@ -21,7 +32,7 @@ const StyledNav = styled.nav`
   background-color: ${themeGet('colors.primary')};
 `;
 
-const Menu = styled.ul`
+const Menu = styled.ul<MenuProps>`
   display: flex;
   flex-wrap: wrap;
 
@@ -66,7 +77,7 @@ const Logo = styled.img`
   margin-right: 0.5rem;
 `;
 
-const Nav = ({ isAuth, isLoggingOut, logoutRequest }) => {
+const Nav: React.FunctionComponent<Props> = ({ isAuth, isLoggingOut, logoutRequest }) => {
   const handleBtnLogoutClick = () => {
     logoutRequest();
   };
@@ -123,12 +134,12 @@ Nav.propTypes = {
   logoutRequest: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: RootState) => ({
   isAuth: authSelectors.getIsAuth(state),
   isLoggingOut: authSelectors.getIsLoggingOut(state),
 });
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({
+const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreators({
   logoutRequest,
 }, dispatch);
 
