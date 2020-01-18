@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
@@ -10,7 +10,21 @@ import {
   clearAuth,
   selectors as authSelectors,
 } from '../../ducks/auth';
-import { getStatus } from '../../ducks/status';
+import { getStatus, selectors as statusSelectors } from '../../ducks/status';
+import { RootState, RootAction } from '../../reducers';
+
+const mapStateToProps = (state: RootState) => ({
+  users: authSelectors.getUsers(state),
+  status: statusSelectors.getState(state),
+});
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreators<any, any>({
+  clearAuth,
+  getStatus,
+}, dispatch);
+
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 
 const StyledH3 = styled.h3`
   color: red;
@@ -26,7 +40,14 @@ const Text = styled.p`
   }
 `;
 
-class StyledPage extends Component {
+class StyledPage extends Component<Props> {
+  static propTypes = {
+    users: PropTypes.object.isRequired,
+    status: PropTypes.object.isRequired,
+    clearAuth: PropTypes.func.isRequired,
+    getStatus: PropTypes.func.isRequired,
+  };
+
   handleBtnClearClick = () => {
     const { clearAuth } = this.props;
     clearAuth();
@@ -62,24 +83,7 @@ class StyledPage extends Component {
   }
 }
 
-StyledPage.propTypes = {
-  users: PropTypes.object.isRequired,
-  status: PropTypes.object.isRequired,
-  clearAuth: PropTypes.func.isRequired,
-  getStatus: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  users: authSelectors.getUsers(state),
-  status: state.status,
-});
-
-const mapDispatchToProps = (dispatch) => bindActionCreators({
-  clearAuth,
-  getStatus,
-}, dispatch);
-
-export default withLayout({ nav: true })(
+export default withLayout<Props>({ nav: true })(
   connect(mapStateToProps, mapDispatchToProps)(
     StyledPage,
   ),
