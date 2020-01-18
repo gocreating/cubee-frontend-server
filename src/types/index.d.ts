@@ -14,3 +14,9 @@ interface Window {
 
 declare module 'cubee' {}
 declare module '@redux-saga/simple-saga-monitor' {}
+
+// https://stackoverflow.com/a/45887328/2443984
+declare module '*.svg' {
+  const content: string;
+  export default content;
+}
