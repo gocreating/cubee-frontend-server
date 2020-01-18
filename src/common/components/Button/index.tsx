@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { variant } from 'styled-system';
 import themeGet from '@styled-system/theme-get';
-import Box from '../Box';
+import Box, { Props as BoxProps } from '../Box';
 
-interface Props {
-  bg: string;
+interface Props extends BoxProps, Pick<HTMLButtonElement, 'type' | 'disabled'> {
+  variant: 'primary' | 'secondary';
 }
 
 const StyledButton = styled(Box).attrs({
