@@ -4,7 +4,11 @@ import { variant } from 'styled-system';
 import themeGet from '@styled-system/theme-get';
 import Box from '../Box';
 
-const Divider = styled(Box)`
+interface Props {
+  variant: 'horizontal' | 'vertical';
+}
+
+const Divider = styled(Box)<Props>`
   display: block;
   clear: both;
 
