@@ -1,9 +1,13 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import themeGet from '@styled-system/theme-get';
 import Box from '../Box';
 
-const Field = styled(Box)`
+/**
+ * Field
+ */
+const Field = styled(Box)<FieldProps>`
   ${props => props.inline ? css`
     display: flex;
   ` : css`
@@ -16,8 +20,8 @@ const Field = styled(Box)`
     padding: ${themeGet('space.2')}px ${themeGet('space.2')}px ${themeGet('space.2')}px 0px;
     color: ${themeGet('colors.black')};
 
-    ${props => !isNaN(props.minLabelWidth) && css`
-      min-width: ${themeGet('space.unit')(props) * props.minLabelWidth}px;
+    ${props => !isNaN(props.minLabelWidth as number) && css`
+      min-width: ${themeGet('space.unit')(props) * (props.minLabelWidth as number)}px;
       text-align: right;
     `}
     ${props => props.required && css`
@@ -45,7 +49,20 @@ Field.defaultProps = {
   required: false,
 };
 
-const Form = styled(Box).attrs({
+/**
+ * FieldSet
+ */
+const FieldSet = styled(Box).attrs({
+  m: 0,
+  p: 0,
+})`
+  border: none;
+`;
+
+/**
+ * Form
+ */
+const Form: FormComponent = styled(Box).attrs({
   as: 'form',
 })`
   ${Field}:first-child {
@@ -56,14 +73,18 @@ const Form = styled(Box).attrs({
   }
 `;
 
-const FieldSet = styled(Box).attrs({
-  m: 0,
-  p: 0,
-})`
-  border: none;
-`;
-
-Form.FieldSet = FieldSet;
 Form.Field = Field;
+Form.FieldSet = FieldSet;
+
+interface FormComponent extends React.FunctionComponent {
+  Field?: typeof Field;
+  FieldSet?: typeof FieldSet;
+}
+
+interface FieldProps {
+  inline?: boolean;
+  minLabelWidth?: number;
+  required?: boolean;
+}
 
 export default Form;
