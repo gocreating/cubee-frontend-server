@@ -23,7 +23,7 @@ interface MenuProps {
 interface Props {
   isLoggingOut: boolean;
   isAuth: boolean;
-  logoutRequest: () => void;
+  logoutRequest: typeof logoutRequest;
 }
 
 const StyledNav = styled.nav`
