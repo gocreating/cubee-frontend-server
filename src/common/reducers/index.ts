@@ -2,8 +2,8 @@ import { combineReducers, Reducer } from 'redux';
 import { History } from 'history';
 import { connectRouter, RouterState } from 'connected-react-router';
 import env from '../utils/env';
-import authReducer, { AuthState } from '../ducks/auth';
-import statusReducer, { StatusState } from '../ducks/status';
+import authReducer, { AuthActions, AuthState } from '../ducks/auth';
+import statusReducer, { StatusActions, StatusState } from '../ducks/status';
 
 let auth: Reducer;
 if (env.isBrowser) {
@@ -32,5 +32,10 @@ export interface RootState {
   auth: AuthState;
   status: StatusState;
 }
+
+export type RootAction = (
+  AuthActions |
+  StatusActions
+);
 
 export default createRootReducer;
