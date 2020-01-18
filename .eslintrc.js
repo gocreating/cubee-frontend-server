@@ -30,13 +30,23 @@ module.exports = {
     'array-element-newline': ['error', 'consistent'],
     'array-bracket-newline': ['error', 'consistent'],
     'react/display-name': [0],
-    "@typescript-eslint/explicit-function-return-type": [
-      'warn', {
-        allowExpressions: true,
-        allowTypedFunctionExpressions: true,
-      }
-    ],
+    // disable the rule for all files
+    '@typescript-eslint/explicit-function-return-type': 'off',
   },
+  // overrides: [
+  //   {
+  //     // enable the rule specifically for TypeScript files
+  //     files: ['*.ts', '*.tsx'],
+  //     rules: {
+  //       "@typescript-eslint/explicit-function-return-type": [
+  //         'warn', {
+  //           allowExpressions: true,
+  //           allowTypedFunctionExpressions: true,
+  //         }
+  //       ],
+  //     },
+  //   },
+  // ],
   settings: {
     react: {
       version: 'latest',
