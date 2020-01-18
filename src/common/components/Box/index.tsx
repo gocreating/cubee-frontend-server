@@ -3,15 +3,18 @@ import {
   space,
   layout,
   flexbox,
-  borderRadius,
+  borders,
   typography,
   color,
+  SpaceProps,
+  LayoutProps,
+  FlexboxProps,
+  BorderProps,
+  TypographyProps,
+  ColorProps,
 } from 'styled-system';
 
-interface Props {
-  fontFamily: string;
-  fontSize: string;
-}
+export interface Props extends SpaceProps, LayoutProps, FlexboxProps, BorderProps, TypographyProps, ColorProps {}
 
 const Box = styled.div<Props>(
   {
@@ -21,7 +24,7 @@ const Box = styled.div<Props>(
   space,
   layout,
   flexbox,
-  borderRadius,
+  borders,
   typography,
   color,
 );
