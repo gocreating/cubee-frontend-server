@@ -90,31 +90,31 @@ const defaultState: AuthState = {
  * Selectors
  */
 export const selectors = {
-  getUserId(state: RootState) {
+  getUserId(state: RootState): string | null{
     const authUserId = fromJS(state.auth)
       .get('authUserId');
     return authUserId ? `${authUserId}` : null;
   },
-  getUser(state: RootState) {
+  getUser(state: RootState): User {
     const authUserId = selectors.getUserId(state);
     return fromJS(state.auth)
       .getIn(['users', authUserId], fromJS({}))
       .toJS();
   },
-  getUsers(state: RootState) {
+  getUsers(state: RootState): UserMap {
     return fromJS(state.auth)
       .get('users')
       .toJS();
   },
-  getIsAuth(state: RootState) {
+  getIsAuth(state: RootState): boolean {
     const authUserId = this.getUserId(state);
     return Boolean(authUserId);
   },
-  getIsLoggingIn(state: RootState) {
+  getIsLoggingIn(state: RootState): boolean {
     return fromJS(state.auth)
       .getIn(['loginMeta', 'isRequesting']);
   },
-  getIsLoggingOut(state: RootState) {
+  getIsLoggingOut(state: RootState): boolean {
     return fromJS(state.auth)
       .getIn(['logoutMeta', 'isRequesting']);
   },
@@ -279,6 +279,10 @@ interface User {
   username: string;
 }
 
+interface UserMap {
+  [id: string]: User;
+}
+
 interface LoginResponseData {
   access_token: string;
   csrf_token: string;
@@ -347,7 +351,5 @@ export interface AuthState {
   loginMeta: ApiMeta;
   logoutMeta: ApiMeta;
   authUserId: string | null;
-  users: {
-    [id: string]: User;
-  };
+  users: UserMap;
 }
