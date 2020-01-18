@@ -7,6 +7,7 @@ import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { API_HOST } from '../config';
 import { selectors as authSelectors } from './auth';
 import apiAgent, { injectCredentials } from '../api/agent';
+import { RootState } from '../reducers/index';
 
 /**
  * Actions
@@ -43,7 +44,11 @@ const defaultState: StatusState = {
 /**
  * Selectors
  */
-export const selectors = {};
+export const selectors = {
+  getState(state: RootState): StatusState {
+    return state.status;
+  },
+};
 
 /**
  * Sagas
