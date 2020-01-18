@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { withLayout } from '../../layouts/AppLayout';
@@ -13,14 +13,26 @@ import {
   loginRequest,
   selectors as authSelectors,
 } from '../../ducks/auth';
+import { RootState, RootAction } from '../../reducers';
 
-class LoginPage extends Component {
-  usernameRef = React.createRef();
-  passwordRef = React.createRef();
+interface Props {
+  isLoggingIn: boolean;
+  loginRequest: typeof loginRequest;
+}
+
+class LoginPage extends Component<Props> {
+  static propTypes = {
+    isLoggingIn: PropTypes.bool.isRequired,
+    loginRequest: PropTypes.func.isRequired,
+  };
+
+  usernameRef = React.createRef<HTMLInputElement>();
+  passwordRef = React.createRef<HTMLInputElement>();
 
   handleBtnLoginClick = () => {
     const { loginRequest } = this.props;
-    loginRequest(this.usernameRef.current.value, this.passwordRef.current.value);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    loginRequest(this.usernameRef.current!.value, this.passwordRef.current!.value);
   }
 
   render() {
@@ -65,20 +77,15 @@ class LoginPage extends Component {
   }
 }
 
-LoginPage.propTypes = {
-  isLoggingIn: PropTypes.bool.isRequired,
-  loginRequest: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: RootState) => ({
   isLoggingIn: authSelectors.getIsLoggingIn(state),
 });
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({
+const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreators({
   loginRequest,
 }, dispatch);
 
-export default withLayout({ nav: true })(
+export default withLayout<Props>({ nav: true })(
   connect(mapStateToProps, mapDispatchToProps)(
     LoginPage,
   ),
