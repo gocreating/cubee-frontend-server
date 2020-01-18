@@ -1,4 +1,4 @@
-import React from 'react';
+import { withProperties } from '../../../types/helpers';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import themeGet from '@styled-system/theme-get';
@@ -62,7 +62,7 @@ const FieldSet = styled(Box).attrs({
 /**
  * Form
  */
-const Form: FormComponent = styled(Box).attrs({
+const Form = styled(Box).attrs({
   as: 'form',
 })`
   ${Field}:first-child {
@@ -73,12 +73,9 @@ const Form: FormComponent = styled(Box).attrs({
   }
 `;
 
-Form.Field = Field;
-Form.FieldSet = FieldSet;
-
-interface FormComponent extends React.FunctionComponent {
-  Field?: typeof Field;
-  FieldSet?: typeof FieldSet;
+interface FormProps {
+  Field: typeof Field;
+  FieldSet: typeof FieldSet;
 }
 
 interface FieldProps {
@@ -87,4 +84,4 @@ interface FieldProps {
   required?: boolean;
 }
 
-export default Form;
+export default withProperties(Form, { Field, FieldSet });
