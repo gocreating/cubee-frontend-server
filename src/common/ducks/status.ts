@@ -70,7 +70,7 @@ export const rootSaga = {
 /**
  * Reducer
  */
-export default (state = defaultState, action: StatusActions): StatusState => {
+export default (state = defaultState, action: StatusActions) => {
   switch (action.type) {
     case GET_STATUS: {
       return {
@@ -118,7 +118,7 @@ export type StatusActions = (
   GetStatusFailAction
 );
 
-export interface StatusState {
+export type StatusState = Readonly<{
   isFetching: boolean;
   error: Error | null;
-}
+}>

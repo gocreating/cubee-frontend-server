@@ -214,7 +214,7 @@ export const rootSaga = {
 /**
  * Reducer
  */
-export default (state = defaultState, action: AuthActions): AuthState=> {
+export default (state = defaultState, action: AuthActions) => {
   switch (action.type) {
     case LOGIN_REQUEST:
       return fromJS(state)
@@ -347,9 +347,9 @@ export type AuthActions = (
   LogoutFailAction
 );
 
-export interface AuthState {
+export type AuthState = Readonly<{
   loginMeta: ApiMeta;
   logoutMeta: ApiMeta;
   authUserId: string | null;
   users: UserMap;
-}
+}>
