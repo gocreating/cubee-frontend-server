@@ -5,7 +5,8 @@ import themeGet from '@styled-system/theme-get';
 import Box, { Props as BoxProps } from '../Box';
 
 interface Props extends BoxProps{
-  variant: 'horizontal' | 'vertical';
+  variant?: 'horizontal' | 'vertical';
+  hidden?: boolean;
 }
 
 const Divider = styled(Box)<Props>`
@@ -31,6 +32,7 @@ const Divider = styled(Box)<Props>`
 `;
 
 Divider.propTypes = {
+  variant: PropTypes.oneOf(['horizontal', 'vertical']),
   hidden: PropTypes.bool,
 };
 
