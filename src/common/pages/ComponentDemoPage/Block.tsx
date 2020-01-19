@@ -5,6 +5,11 @@ import themeGet from '@styled-system/theme-get';
 import Container from '../../components/Container';
 import { H2 } from '../../components/Heading';
 
+interface Props {
+  title?: string;
+  children?: React.ReactNode;
+}
+
 const StyledH2 = styled(H2).attrs({
   color: 'primary',
   pt: 5,
@@ -14,7 +19,7 @@ const StyledH2 = styled(H2).attrs({
   border-bottom: 2px solid ${themeGet('colors.grey')};
 `;
 
-const Block = ({ title, children }) => (
+const Block: React.FunctionComponent<Props> = ({ title, children }) => (
   <Container p={3}>
     <StyledH2>{title}</StyledH2>
     {children}
