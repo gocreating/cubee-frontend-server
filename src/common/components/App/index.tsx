@@ -27,12 +27,12 @@ const LoginPage = Loadable({
   loading: () => null,
 });
 
-const App = () => (
+const App: React.FunctionComponent = () => (
   <ThemeProvider theme={theme}>
     <>
       <Helmet>
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta charset="utf-8" />
+        <meta charSet="utf-8" />
         <title>Cubee</title>
         <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
       </Helmet>
