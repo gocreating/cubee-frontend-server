@@ -74,6 +74,10 @@ jobs:
           name: Type Checking
           command: |
             yarn tsc
+      - run:
+          name: Unit Test
+          command: |
+            yarn test
 
   build_docker_image:
     docker:
