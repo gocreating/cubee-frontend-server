@@ -3,8 +3,8 @@ import { variant } from 'styled-system';
 import themeGet from '@styled-system/theme-get';
 import Box, { Props as BoxProps } from '../Box';
 
-interface Props extends BoxProps, Pick<HTMLButtonElement, 'type' | 'disabled'> {
-  variant: 'primary' | 'secondary';
+type Props = BoxProps | Pick<HTMLButtonElement, 'type' | 'disabled'> | {
+  variant?: 'primary' | 'secondary';
 }
 
 const StyledButton = styled(Box).attrs({
