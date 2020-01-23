@@ -26,6 +26,10 @@ const LoginPage = Loadable({
   loader: () => import('../../pages/LoginPage'),
   loading: () => null,
 });
+const NoMatchPage = Loadable({
+  loader: () => import('../../pages/NoMatchPage'),
+  loading: () => null,
+});
 
 const App: React.FunctionComponent = () => (
   <ThemeProvider theme={theme}>
@@ -44,6 +48,7 @@ const App: React.FunctionComponent = () => (
         <Route exact path="/styled" component={StyledPage} />
         <Route exact path="/components" component={ComponentDemoPage} />
         <Route exact path="/login" component={LoginPage} />
+        <Route path="*" component={NoMatchPage} />
       </Switch>
     </>
   </ThemeProvider>
