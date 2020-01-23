@@ -5,39 +5,29 @@ import { Switch, Route } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import { ThemeProvider } from 'styled-components';
 import { Helmet } from 'react-helmet';
+import LoadingPage from '../../pages/LoadingPage';
 import theme, { ResetStyle, GlobalStyle } from '../../theme';
 import { selectors as hostSelectors } from '../../ducks/host';
 import { RootState } from '../../reducers';
 import './App.css';
 
-const HomePage = Loadable({
-  loader: () => import('../../pages/HomePage'),
-  loading: () => null,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type DynamicImportType = () => Promise<{ default: React.ComponentType<any> }>;
+
+const createLoadable = (loader: DynamicImportType) => Loadable({
+  loader,
+  loading: LoadingPage,
+  delay: 200,
+  timeout: 10000,
 });
-const AboutPage = Loadable({
-  loader: () => import('../../pages/AboutPage'),
-  loading: () => null,
-});
-const TestPage = Loadable({
-  loader: () => import('../../pages/TestPage'),
-  loading: () => null,
-});
-const ComponentDemoPage = Loadable({
-  loader: () => import('../../pages/ComponentDemoPage'),
-  loading: () => null,
-});
-const LoginPage = Loadable({
-  loader: () => import('../../pages/LoginPage'),
-  loading: () => null,
-});
-const UserPostListPage = Loadable({
-  loader: () => import('../../pages/user/PostListPage'),
-  loading: () => null,
-});
-const NoMatchPage = Loadable({
-  loader: () => import('../../pages/NoMatchPage'),
-  loading: () => null,
-});
+
+const HomePage = createLoadable(() => import('../../pages/HomePage'));
+const AboutPage = createLoadable(() => import('../../pages/AboutPage'));
+const TestPage = createLoadable(() => import('../../pages/TestPage'));
+const ComponentDemoPage = createLoadable(() => import('../../pages/ComponentDemoPage'));
+const LoginPage = createLoadable(() => import('../../pages/LoginPage'));
+const UserPostListPage = createLoadable(() => import('../../pages/user/PostListPage'));
+const NoMatchPage = createLoadable(() => import('../../pages/NoMatchPage'));
 
 const mapStateToProps = (state: RootState) => ({
   isUserDomain: hostSelectors.getIsUserDomain(state),
@@ -62,6 +52,7 @@ const App: React.FunctionComponent<Props> = ({ isUserDomain }) => (
         <Route exact path="/test" component={TestPage} />
         <Route exact path="/components" component={ComponentDemoPage} />
         <Route exact path="/login" component={LoginPage} />
+        <Route exact path="/loading" component={LoadingPage} />
         {isUserDomain && (
           <Route exact path="/posts" component={UserPostListPage} />
         )}
