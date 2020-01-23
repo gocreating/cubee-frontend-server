@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import styled, { withTheme, ThemeContext } from 'styled-components';
 import { User as UserIcon } from '@styled-icons/boxicons-regular/User/User';
+import { Spinner as SpinnerIcon } from '@styled-icons/fa-solid/Spinner';
 import { Helmet } from 'react-helmet';
 import { withLayout } from '../../layouts/AppLayout';
 import Container from '../../components/Container';
@@ -9,6 +10,7 @@ import Button, { ButtonGroup } from '../../components/Button';
 import Divider from '../../components/Divider';
 import Form from '../../components/Form';
 import Input from '../../components/Input';
+import Spinnable from '../../components/Spinnable';
 import Block from './Block';
 
 interface RectangleProps {
@@ -167,6 +169,10 @@ const ComponentDemoPage: React.FunctionComponent = () => {
 
       <Block title="Icon／圖示">
         <UserIcon size={24} />
+        <SpinnerIcon size={24} />
+        <Spinnable>
+          <SpinnerIcon size={24} />
+        </Spinnable>
       </Block>
     </Container>
   );
