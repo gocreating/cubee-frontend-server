@@ -1,9 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import { ThemeProvider } from 'styled-components';
 import { Helmet } from 'react-helmet';
 import theme, { ResetStyle, GlobalStyle } from '../../theme';
+import { selectors as hostSelectors } from '../../ducks/host';
+import { RootState } from '../../reducers';
 import './App.css';
 
 const HomePage = Loadable({
@@ -26,12 +30,22 @@ const LoginPage = Loadable({
   loader: () => import('../../pages/LoginPage'),
   loading: () => null,
 });
+const UserPostListPage = Loadable({
+  loader: () => import('../../pages/user/PostListPage'),
+  loading: () => null,
+});
 const NoMatchPage = Loadable({
   loader: () => import('../../pages/NoMatchPage'),
   loading: () => null,
 });
 
-const App: React.FunctionComponent = () => (
+const mapStateToProps = (state: RootState) => ({
+  isUserDomain: hostSelectors.getIsUserDomain(state),
+});
+
+type Props = ReturnType<typeof mapStateToProps>;
+
+const App: React.FunctionComponent<Props> = ({ isUserDomain }) => (
   <ThemeProvider theme={theme}>
     <>
       <Helmet>
@@ -48,10 +62,17 @@ const App: React.FunctionComponent = () => (
         <Route exact path="/styled" component={StyledPage} />
         <Route exact path="/components" component={ComponentDemoPage} />
         <Route exact path="/login" component={LoginPage} />
+        {isUserDomain && (
+          <Route exact path="/posts" component={UserPostListPage} />
+        )}
         <Route path="*" component={NoMatchPage} />
       </Switch>
     </>
   </ThemeProvider>
 );
 
-export default App;
+App.propTypes = {
+  isUserDomain: PropTypes.bool.isRequired,
+};
+
+export default connect(mapStateToProps)(App);
