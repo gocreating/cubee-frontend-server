@@ -52,6 +52,7 @@
     "immutable": "^4.0.0-rc.12",
     "jwt-decode": "^2.2.0",
     "prop-types": "^15.7.2",
+    "query-string": "^6.10.1",
     "razzle": "^3.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
