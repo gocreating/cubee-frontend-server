@@ -103,7 +103,7 @@ const Nav: React.FunctionComponent<Props> = ({
           <Link to="/about">About</Link>
         </MenuItem>
         <MenuItem>
-          <Link to="/styled">Styled</Link>
+          <Link to="/test">Test</Link>
         </MenuItem>
         <MenuItem>
           <Link to="/components">

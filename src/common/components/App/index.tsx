@@ -18,8 +18,8 @@ const AboutPage = Loadable({
   loader: () => import('../../pages/AboutPage'),
   loading: () => null,
 });
-const StyledPage = Loadable({
-  loader: () => import('../../pages/StyledPage'),
+const TestPage = Loadable({
+  loader: () => import('../../pages/TestPage'),
   loading: () => null,
 });
 const ComponentDemoPage = Loadable({
@@ -59,7 +59,7 @@ const App: React.FunctionComponent<Props> = ({ isUserDomain }) => (
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/about" component={AboutPage} />
-        <Route exact path="/styled" component={StyledPage} />
+        <Route exact path="/test" component={TestPage} />
         <Route exact path="/components" component={ComponentDemoPage} />
         <Route exact path="/login" component={LoginPage} />
         {isUserDomain && (

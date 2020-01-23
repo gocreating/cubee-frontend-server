@@ -40,7 +40,7 @@ const Text = styled.p`
   }
 `;
 
-class StyledPage extends Component<Props> {
+class TestPage extends Component<Props> {
   static propTypes = {
     users: PropTypes.object.isRequired,
     status: PropTypes.object.isRequired,
@@ -85,6 +85,6 @@ class StyledPage extends Component<Props> {
 
 export default withLayout<Props>({ nav: true })(
   connect(mapStateToProps, mapDispatchToProps)(
-    StyledPage,
+    TestPage,
   ),
 );
