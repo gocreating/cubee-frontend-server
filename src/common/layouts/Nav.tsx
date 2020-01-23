@@ -12,6 +12,9 @@ import {
   logoutRequest,
   selectors as authSelectors,
 } from '../ducks/auth';
+import {
+  selectors as hostSelectors,
+} from '../ducks/host';
 import { RootState, RootAction } from '../reducers';
 import Divider from '../components/Divider';
 import logo from '../../../public/logo.svg';
@@ -23,6 +26,7 @@ interface MenuProps {
 interface Props {
   isLoggingOut: boolean;
   isAuth: boolean;
+  isUserDomain: boolean;
   logoutRequest: typeof logoutRequest;
 }
 
@@ -77,7 +81,9 @@ const Logo = styled.img`
   margin-right: 0.5rem;
 `;
 
-const Nav: React.FunctionComponent<Props> = ({ isAuth, isLoggingOut, logoutRequest }) => {
+const Nav: React.FunctionComponent<Props> = ({
+  isAuth, isLoggingOut, isUserDomain, logoutRequest,
+}) => {
   const handleBtnLogoutClick = () => {
     logoutRequest();
   };
@@ -95,8 +101,6 @@ const Nav: React.FunctionComponent<Props> = ({ isAuth, isLoggingOut, logoutReque
         <MenuItem>
           <Link to="/about">About</Link>
         </MenuItem>
-      </Menu>
-      <Menu pullRight>
         <MenuItem>
           <Link to="/styled">Styled</Link>
         </MenuItem>
@@ -106,6 +110,15 @@ const Nav: React.FunctionComponent<Props> = ({ isAuth, isLoggingOut, logoutReque
             Components
           </Link>
         </MenuItem>
+      </Menu>
+      <Menu pullRight>
+        {isUserDomain && (
+          <MenuItem>
+            <Link to="/posts">
+              Posts
+            </Link>
+          </MenuItem>
+        )}
         {!isAuth && (
           <MenuItem>
             <Link to="/login">
@@ -131,12 +144,14 @@ const Nav: React.FunctionComponent<Props> = ({ isAuth, isLoggingOut, logoutReque
 Nav.propTypes = {
   isLoggingOut: PropTypes.bool.isRequired,
   isAuth: PropTypes.bool.isRequired,
+  isUserDomain: PropTypes.bool.isRequired,
   logoutRequest: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state: RootState) => ({
   isAuth: authSelectors.getIsAuth(state),
   isLoggingOut: authSelectors.getIsLoggingOut(state),
+  isUserDomain: hostSelectors.getIsUserDomain(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreators({
