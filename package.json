@@ -43,6 +43,10 @@
   },
   "dependencies": {
     "@redux-saga/simple-saga-monitor": "^1.0.2",
+    "@styled-icons/boxicons-regular": "^9.2.0",
+    "@styled-icons/boxicons-solid": "^9.2.0",
+    "@styled-icons/fa-solid": "^9.2.0",
+    "@styled-icons/remix-line": "^9.2.0",
     "@styled-system/theme-get": "^5.1.1",
     "babel-loader": "^8.0.4",
     "connected-react-router": "^6.6.1",
@@ -67,7 +71,6 @@
     "redux-saga": "^1.0.5",
     "serialize-javascript": "^2.1.1",
     "styled-components": "^4.3.2",
-    "styled-icons": "^8.3.0",
     "styled-system": "^5.1.1"
   },
   "devDependencies": {

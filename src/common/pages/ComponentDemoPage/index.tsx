@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled, { withTheme, ThemeContext } from 'styled-components';
-import { User as UserIcon } from 'styled-icons/boxicons-regular/User';
+import { User as UserIcon } from '@styled-icons/boxicons-regular/User/User';
 import { Helmet } from 'react-helmet';
 import { withLayout } from '../../layouts/AppLayout';
 import Container from '../../components/Container';
