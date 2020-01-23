@@ -7,6 +7,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import Loadable from 'react-loadable';
 import configureStore from '../common/store/configureStore';
 import App from '../common/components/App';
+import { setHost } from '../common/ducks/host';
 
 const preloadedState = window.__PRELOADED_STATE__;
 const { store, history } = configureStore(preloadedState);
@@ -14,6 +15,7 @@ const { store, history } = configureStore(preloadedState);
 delete window.__PRELOADED_STATE__;
 
 Loadable.preloadReady().then(() => {
+  store.dispatch(setHost(window.location.host));
   hydrate(
     <Provider store={store}>
       <ConnectedRouter history={history as History}>

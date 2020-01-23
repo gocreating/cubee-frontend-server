@@ -3,6 +3,7 @@ import { History } from 'history';
 import { connectRouter, RouterState } from 'connected-react-router';
 import env from '../utils/env';
 import authReducer, { AuthActions, AuthState } from '../ducks/auth';
+import hostReducer, { HostActions, HostState } from '../ducks/host';
 import statusReducer, { StatusActions, StatusState } from '../ducks/status';
 
 let auth: Reducer;
@@ -24,17 +25,20 @@ if (env.isBrowser) {
 const createRootReducer = (history: History): Reducer => combineReducers({
   router: connectRouter(history),
   auth,
+  host: hostReducer,
   status: statusReducer,
 });
 
 export interface RootState {
   router: RouterState;
   auth: AuthState;
+  host: HostState;
   status: StatusState;
 }
 
 export type RootAction = (
   AuthActions |
+  HostActions |
   StatusActions
 );
 
