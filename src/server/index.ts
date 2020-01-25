@@ -35,7 +35,7 @@ server.get('/config', (req, res) => {
 
 server.get('/*', configureStore, syncStoreWithClientSide);
 
-server.get('/styled', getStatus);
+server.get('/test', getStatus);
 
 server
   .disable('x-powered-by')
