@@ -80,7 +80,7 @@ const Logo = styled.img`
 `;
 
 const Nav: React.FunctionComponent<Props> = ({
-  isAuth, isLoggingOut, isUserDomain, host, logoutRequest,
+  isAuth, isLoggingOut, isRootDomain, isUserDomain, username, host, logoutRequest,
 }) => {
   const handleBtnLogoClick = () => {
     if (isUserDomain) {
@@ -91,6 +91,9 @@ const Nav: React.FunctionComponent<Props> = ({
     } else {
       push('/');
     }
+  };
+  const handleBtnMySpaceClick = () => {
+    window.location.href = `${window.location.protocol}//${username}.${host}`;
   };
   const handleBtnLogoutClick = () => {
     logoutRequest();
@@ -120,21 +123,28 @@ const Nav: React.FunctionComponent<Props> = ({
         </MenuItem>
       </Menu>
       <Menu pullRight>
+        {isAuth && isRootDomain && (
+          <MenuItem>
+            <Link to="#" onClick={handleBtnMySpaceClick}>
+              Space
+            </Link>
+          </MenuItem>
+        )}
+        {isAuth && isUserDomain && (
+          <MenuItem>
+            <Link to="/posts/new">
+              <AddIcon size={24} />
+              New Post
+            </Link>
+          </MenuItem>
+        )}
         {isUserDomain && (
-          <>
-            <MenuItem>
-              <Link to="/posts/new">
-                <AddIcon size={24} />
-                New Post
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <Link to="/posts">
-                <ArticleIcon size={22} />
-                Posts
-              </Link>
-            </MenuItem>
-          </>
+          <MenuItem>
+            <Link to="/posts">
+              <ArticleIcon size={22} />
+              Posts
+            </Link>
+          </MenuItem>
         )}
         {!isAuth && (
           <MenuItem>
@@ -161,6 +171,7 @@ const Nav: React.FunctionComponent<Props> = ({
 Nav.propTypes = {
   isLoggingOut: PropTypes.bool.isRequired,
   isAuth: PropTypes.bool.isRequired,
+  isRootDomain: PropTypes.bool.isRequired,
   isUserDomain: PropTypes.bool.isRequired,
   host: PropTypes.string.isRequired,
   logoutRequest: PropTypes.func.isRequired,
@@ -170,7 +181,9 @@ Nav.propTypes = {
 const mapStateToProps = (state: RootState) => ({
   isAuth: authSelectors.getIsAuth(state),
   isLoggingOut: authSelectors.getIsLoggingOut(state),
+  isRootDomain: hostSelectors.getIsRootDomain(state),
   isUserDomain: hostSelectors.getIsUserDomain(state),
+  username: authSelectors.getUsername(state),
   host: hostSelectors.getHost(state),
 });
 

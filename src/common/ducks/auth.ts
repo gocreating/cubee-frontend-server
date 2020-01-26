@@ -103,6 +103,9 @@ export const selectors = {
       .getIn(['users', authUserId], fromJS({}))
       .toJS();
   },
+  getUsername(state: RootState): string {
+    return this.getUser(state).username;
+  },
   getUsers(state: RootState): UserMap {
     return fromJS(state.auth)
       .get('users')
