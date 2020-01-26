@@ -3,7 +3,7 @@ import themeGet from '@styled-system/theme-get';
 import Box, { Props as BoxProps } from '../Box';
 
 interface Props extends BoxProps, Pick<HTMLInputElement, 'type'> {
-  autoComplete: string;
+  autoComplete?: string;
 }
 
 const Input = styled(Box).attrs({
