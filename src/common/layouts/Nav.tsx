@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import styled, { css } from 'styled-components';
 import { typography } from 'styled-system';
 import themeGet from '@styled-system/theme-get';
@@ -25,12 +26,7 @@ interface MenuProps {
   pullRight?: boolean;
 }
 
-interface Props {
-  isLoggingOut: boolean;
-  isAuth: boolean;
-  isUserDomain: boolean;
-  logoutRequest: typeof logoutRequest;
-}
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 
 const StyledNav = styled.nav`
   display: flex;
@@ -84,8 +80,18 @@ const Logo = styled.img`
 `;
 
 const Nav: React.FunctionComponent<Props> = ({
-  isAuth, isLoggingOut, isUserDomain, logoutRequest,
+  isAuth, isLoggingOut, isUserDomain, host, logoutRequest,
 }) => {
+  const handleBtnLogoClick = () => {
+    if (isUserDomain) {
+      const parts = host.split('.');
+      parts.shift();
+      const rootHost = parts.join('.');
+      window.location.href = `${window.location.protocol}//${rootHost}`;
+    } else {
+      push('/');
+    }
+  };
   const handleBtnLogoutClick = () => {
     logoutRequest();
   };
@@ -94,7 +100,7 @@ const Nav: React.FunctionComponent<Props> = ({
     <StyledNav>
       <Menu>
         <MenuItem>
-          <Link to="/">
+          <Link to="#" onClick={handleBtnLogoClick}>
             <Logo src={logo} />
             Cubee
           </Link>
@@ -156,17 +162,21 @@ Nav.propTypes = {
   isLoggingOut: PropTypes.bool.isRequired,
   isAuth: PropTypes.bool.isRequired,
   isUserDomain: PropTypes.bool.isRequired,
+  host: PropTypes.string.isRequired,
   logoutRequest: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state: RootState) => ({
   isAuth: authSelectors.getIsAuth(state),
   isLoggingOut: authSelectors.getIsLoggingOut(state),
   isUserDomain: hostSelectors.getIsUserDomain(state),
+  host: hostSelectors.getHost(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreators({
   logoutRequest,
+  push,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(
