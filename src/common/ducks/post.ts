@@ -6,14 +6,19 @@ import {
 } from 'cubee';
 import qs from 'query-string';
 import { fromJS } from 'immutable';
-import { call, put, takeEvery, select } from 'redux-saga/effects';
+import { call, put, takeEvery, select, all } from 'redux-saga/effects';
 import { API_HOST } from '../config';
-import apiAgent from '../api/agent';
+import apiAgent, { injectCredentials } from '../api/agent';
+import { selectors as authSelectors } from './auth';
 import { RootState } from '../reducers/index';
 
 /**
  * Actions
  */
+const CREATE_POST_REQUEST = 'CREATE_POST_REQUEST';
+const CREATE_POST_SUCCESS = 'CREATE_POST_SUCCESS';
+const CREATE_POST_FAIL = 'CREATE_POST_FAIL';
+
 const LIST_USER_POST_REQUEST = 'LIST_USER_POST_REQUEST';
 const LIST_USER_POST_SUCCESS = 'LIST_USER_POST_SUCCESS';
 const LIST_USER_POST_FAIL = 'LIST_USER_POST_FAIL';
@@ -36,11 +41,32 @@ export const listUserPostFail = (error: Error, res?: Response): PostActions => (
   payload: { error, res },
 });
 
+export const createPostRequest = (title: string, body: object): PostActions => ({
+  type: CREATE_POST_REQUEST,
+  payload: { title, body },
+});
+
+export const createPostSuccess = (res: Response<CreatePostResponseData>): PostActions => ({
+  type: CREATE_POST_SUCCESS,
+  payload: { res },
+});
+
+export const createPostFail = (error: Error, res?: Response): PostActions => ({
+  type: CREATE_POST_FAIL,
+  payload: { error, res },
+});
+
 /**
  * Default State
  */
 const defaultState: PostState = {
   listUserPostMeta: {
+    isRequesting: false,
+    isRequested: false,
+    isRequestSuccess: false,
+    isRequestFail: false,
+  },
+  createPostMeta: {
     isRequesting: false,
     isRequested: false,
     isRequestSuccess: false,
@@ -105,6 +131,31 @@ export const sagas = {
       yield put(listUserPostFail(err));
     }
   },
+  *handleCreatePostRequest(action: CreatePostRequestAction) {
+    try {
+      const { accessToken } = yield select(authSelectors.getUser);
+      const { payload } = action;
+      const res = yield call(apiAgent, `${API_HOST}/posts/`, injectCredentials({
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          title: payload.title,
+          body: payload.body,
+        }),
+      }, accessToken));
+      if (res.code !== 200) {
+        yield put(createPostFail(new Error('Create post fail'), res));
+      } else {
+        yield put(createPostSuccess(res));
+      }
+    } catch (err) {
+      yield put(createPostFail(err));
+    }
+  },
   handleRequestFail(action: ListUserPostFailAction) {
     const { res } = action.payload;
     if (res) {
@@ -117,8 +168,14 @@ export const rootSaga = {
   *listUserPostRequest() {
     yield takeEvery(LIST_USER_POST_REQUEST, sagas.handleListUserPostRequest);
   },
-  *listUserPostFail() {
-    yield takeEvery(LIST_USER_POST_FAIL, sagas.handleRequestFail);
+  *createPostRequest() {
+    yield takeEvery(CREATE_POST_REQUEST, sagas.handleCreatePostRequest);
+  },
+  *apiFail() {
+    yield all([
+      takeEvery(LIST_USER_POST_FAIL, sagas.handleRequestFail),
+      takeEvery(CREATE_POST_FAIL, sagas.handleRequestFail),
+    ]);
   },
 };
 
@@ -160,6 +217,24 @@ export default (state = defaultState, action: PostActions) => {
         .setIn(['listUserPostMeta', 'isRequestSuccess'], false)
         .setIn(['listUserPostMeta', 'isRequestFail'], true)
         .toJS();
+    case CREATE_POST_REQUEST:
+      return fromJS(state)
+        .setIn(['createPostMeta', 'isRequesting'], true)
+        .toJS();
+    case CREATE_POST_SUCCESS:
+      return fromJS(state)
+        .setIn(['createPostMeta', 'isRequesting'], false)
+        .setIn(['createPostMeta', 'isRequested'], true)
+        .setIn(['createPostMeta', 'isRequestSuccess'], true)
+        .setIn(['createPostMeta', 'isRequestFail'], false)
+        .toJS();
+    case CREATE_POST_FAIL:
+      return fromJS(state)
+        .setIn(['createPostMeta', 'isRequesting'], false)
+        .setIn(['createPostMeta', 'isRequested'], true)
+        .setIn(['createPostMeta', 'isRequestSuccess'], false)
+        .setIn(['createPostMeta', 'isRequestFail'], true)
+        .toJS();
     default:
       return state;
   }
@@ -171,6 +246,7 @@ export default (state = defaultState, action: PostActions) => {
 export interface Post {
   id: number;
   title: string;
+  body: object;
   created_ts: number;
   updated_ts: number;
 }
@@ -195,18 +271,22 @@ interface ListUserPostResponseData {
   };
 }
 
-interface ListUserPostRequestAction {
-  type: typeof LIST_USER_POST_REQUEST;
-  payload: {
-    username: string;
-    page: number;
-  };
+interface CreatePostResponseData {
+  post: Post;
 }
 
 interface ListUserPostSuccessActionPayload extends ApiSuccessActionPayload<{
   data: ListUserPostResponseData;
 }> {
   page: number;
+}
+
+interface ListUserPostRequestAction {
+  type: typeof LIST_USER_POST_REQUEST;
+  payload: {
+    username: string;
+    page: number;
+  };
 }
 
 interface ListUserPostSuccessAction {
@@ -223,14 +303,38 @@ interface ListUserPostFailAction {
   payload: ApiFailActionPayload;
 }
 
+interface CreatePostRequestAction {
+  type: typeof CREATE_POST_REQUEST;
+  payload: {
+    title: string;
+    body: object;
+  };
+}
+
+interface CreatePostSuccessAction {
+  type: typeof CREATE_POST_SUCCESS;
+  payload: ApiSuccessActionPayload<{
+    data: CreatePostResponseData;
+  }>;
+}
+
+interface CreatePostFailAction {
+  type: typeof CREATE_POST_FAIL;
+  payload: ApiFailActionPayload;
+}
+
 export type PostActions = (
   ListUserPostRequestAction |
   ListUserPostSuccessAction |
-  ListUserPostFailAction
+  ListUserPostFailAction |
+  CreatePostRequestAction |
+  CreatePostSuccessAction |
+  CreatePostFailAction
 );
 
 export type PostState = Readonly<{
   listUserPostMeta: ApiMeta;
+  createPostMeta: ApiMeta;
   entities: PostMap;
   pagesOfUser: {
     meta: PageMeta;
