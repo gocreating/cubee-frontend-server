@@ -22,6 +22,7 @@ const defaultState: HostState = {
   isRootDomain: false,
   isUserDomain: false,
   username: '',
+  currentHost: '',
 };
 
 /**
@@ -39,6 +40,10 @@ export const selectors = {
   getUsername(state: RootState): string {
     return fromJS(state.host)
       .get('username');
+  },
+  getHost(state: RootState): string {
+    return fromJS(state.host)
+      .get('currentHost');
   },
 };
 
@@ -60,6 +65,7 @@ export default (state = defaultState, action: HostActions) => {
         .set('isRootDomain', isRootDomain)
         .set('isUserDomain', isUserDomain)
         .set('username', isUserDomain ? firstPart : '')
+        .set('currentHost', host)
         .toJS();
     }
     default:
@@ -85,4 +91,5 @@ export type HostState = Readonly<{
   isRootDomain: boolean;
   isUserDomain: boolean;
   username: string;
+  currentHost: string;
 }>

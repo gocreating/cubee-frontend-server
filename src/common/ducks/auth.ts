@@ -10,6 +10,8 @@ import { push } from 'connected-react-router';
 import { API_HOST } from '../config';
 import apiAgent, { injectCredentials } from '../api/agent';
 import { RootState } from '../reducers/index';
+import { selectors as hostSelectors } from './host';
+import env from '../utils/env';
 
 /**
  * Actions
@@ -149,10 +151,18 @@ export const sagas = {
     }
   },
   *handleLoginSuccess(action: LoginSuccessAction) {
+    const isRootDomain = yield select(hostSelectors.getIsRootDomain);
+    const host = yield select(hostSelectors.getHost);
     const { res } = action.payload;
     const { data } = res;
     yield put(setAuth(data.access_token, data.csrf_token, data.user));
-    yield put(push('/'));
+    if (env.isBrowser) {
+      if (isRootDomain) {
+        window.location.href = `${window.location.protocol}//${data.user.username}.${host}/posts`;
+      } else {
+        yield put(push('/posts'));
+      }
+    }
   },
   *handleLogoutRequest() {
     try {
