@@ -7,7 +7,7 @@ import { typography } from 'styled-system';
 import themeGet from '@styled-system/theme-get';
 import { Link } from 'react-router-dom';
 import { Component as ComponentIcon } from '@styled-icons/boxicons-solid/Component';
-import { User as UserIcon } from '@styled-icons/fa-solid/User';
+import { User as UserIcon } from '@styled-icons/boxicons-regular/User';
 import { Article as ArticleIcon } from '@styled-icons/remix-line/Article';
 import {
   logoutRequest,
@@ -132,7 +132,7 @@ const Nav: React.FunctionComponent<Props> = ({
         {isAuth && (
           <MenuItem>
             <Link to="#" onClick={handleBtnLogoutClick}>
-              <UserIcon />
+              <UserIcon size={20} />
               Logout
               {isLoggingOut && '...'}
             </Link>
