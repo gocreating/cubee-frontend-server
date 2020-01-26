@@ -29,6 +29,7 @@ const PostNewPage: React.FunctionComponent<Props> = ({
   const refTitle = useRef<HTMLInputElement>(null);
   const refBody = useRef<HTMLInputElement>(null);
   const handleBtnCreateClick = () => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     createPostRequest(refTitle.current!.value, { test: refBody.current!.value });
   };
 

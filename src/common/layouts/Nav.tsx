@@ -26,6 +26,20 @@ interface MenuProps {
   pullRight?: boolean;
 }
 
+const mapStateToProps = (state: RootState) => ({
+  isAuth: authSelectors.getIsAuth(state),
+  isLoggingOut: authSelectors.getIsLoggingOut(state),
+  isRootDomain: hostSelectors.getIsRootDomain(state),
+  isUserDomain: hostSelectors.getIsUserDomain(state),
+  username: authSelectors.getUsername(state),
+  host: hostSelectors.getHost(state),
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreators({
+  logoutRequest,
+  push,
+}, dispatch);
+
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 
 const StyledNav = styled.nav`
@@ -173,24 +187,11 @@ Nav.propTypes = {
   isAuth: PropTypes.bool.isRequired,
   isRootDomain: PropTypes.bool.isRequired,
   isUserDomain: PropTypes.bool.isRequired,
+  username: PropTypes.string.isRequired,
   host: PropTypes.string.isRequired,
   logoutRequest: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
 };
-
-const mapStateToProps = (state: RootState) => ({
-  isAuth: authSelectors.getIsAuth(state),
-  isLoggingOut: authSelectors.getIsLoggingOut(state),
-  isRootDomain: hostSelectors.getIsRootDomain(state),
-  isUserDomain: hostSelectors.getIsUserDomain(state),
-  username: authSelectors.getUsername(state),
-  host: hostSelectors.getHost(state),
-});
-
-const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreators({
-  logoutRequest,
-  push,
-}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   Nav,
