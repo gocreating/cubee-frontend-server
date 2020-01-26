@@ -27,6 +27,7 @@ const TestPage = createLoadable(() => import('../../pages/TestPage'));
 const ComponentDemoPage = createLoadable(() => import('../../pages/ComponentDemoPage'));
 const LoginPage = createLoadable(() => import('../../pages/LoginPage'));
 const UserPostListPage = createLoadable(() => import('../../pages/user/PostListPage'));
+const PostNewPage = createLoadable(() => import('../../pages/user/PostNewPage'));
 const NoMatchPage = createLoadable(() => import('../../pages/NoMatchPage'));
 
 const mapStateToProps = (state: RootState) => ({
@@ -54,7 +55,10 @@ const App: React.FunctionComponent<Props> = ({ isUserDomain }) => (
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/loading" component={LoadingPage} />
         {isUserDomain && (
-          <Route exact path="/posts" component={UserPostListPage} />
+          <>
+            <Route exact path="/posts" component={UserPostListPage} />
+            <Route exact path="/posts/new" component={PostNewPage} />
+          </>
         )}
         <Route path="*" component={NoMatchPage} />
       </Switch>
