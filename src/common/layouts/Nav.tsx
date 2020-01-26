@@ -8,6 +8,7 @@ import themeGet from '@styled-system/theme-get';
 import { Link } from 'react-router-dom';
 import { Component as ComponentIcon } from '@styled-icons/boxicons-solid/Component';
 import { User as UserIcon } from '@styled-icons/boxicons-regular/User';
+import { Add as AddIcon } from '@styled-icons/material/Add';
 import { Article as ArticleIcon } from '@styled-icons/remix-line/Article';
 import {
   logoutRequest,
@@ -114,12 +115,20 @@ const Nav: React.FunctionComponent<Props> = ({
       </Menu>
       <Menu pullRight>
         {isUserDomain && (
-          <MenuItem>
-            <Link to="/posts">
-              <ArticleIcon size={22} />
-              Posts
-            </Link>
-          </MenuItem>
+          <>
+            <MenuItem>
+              <Link to="/posts/new">
+                <AddIcon size={24} />
+                New Post
+              </Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to="/posts">
+                <ArticleIcon size={22} />
+                Posts
+              </Link>
+            </MenuItem>
+          </>
         )}
         {!isAuth && (
           <MenuItem>

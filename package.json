@@ -46,6 +46,7 @@
     "@styled-icons/boxicons-regular": "^9.2.0",
     "@styled-icons/boxicons-solid": "^9.2.0",
     "@styled-icons/fa-solid": "^9.2.0",
+    "@styled-icons/material": "^9.2.0",
     "@styled-icons/remix-line": "^9.2.0",
     "@styled-system/theme-get": "^5.1.1",
     "babel-loader": "^8.0.4",
