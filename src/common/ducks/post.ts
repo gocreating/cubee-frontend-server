@@ -11,6 +11,7 @@ import { API_HOST } from '../config';
 import apiAgent, { injectCredentials } from '../api/agent';
 import { selectors as authSelectors } from './auth';
 import { RootState } from '../reducers/index';
+import { handleRequestFail } from '../utils/sagaUtils';
 
 /**
  * Actions
@@ -156,12 +157,6 @@ export const sagas = {
       yield put(createPostFail(err));
     }
   },
-  handleRequestFail(action: ListUserPostFailAction) {
-    const { res } = action.payload;
-    if (res) {
-      alert(fromJS(res).getIn(['data', 'message'], 'Some error happened.'));
-    }
-  },
 };
 
 export const rootSaga = {
@@ -173,8 +168,8 @@ export const rootSaga = {
   },
   *apiFail() {
     yield all([
-      takeEvery(LIST_USER_POST_FAIL, sagas.handleRequestFail),
-      takeEvery(CREATE_POST_FAIL, sagas.handleRequestFail),
+      takeEvery(LIST_USER_POST_FAIL, handleRequestFail),
+      takeEvery(CREATE_POST_FAIL, handleRequestFail),
     ]);
   },
 };

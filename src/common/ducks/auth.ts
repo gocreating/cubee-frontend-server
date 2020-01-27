@@ -11,6 +11,7 @@ import { API_HOST } from '../config';
 import apiAgent, { injectCredentials } from '../api/agent';
 import { RootState } from '../reducers/index';
 import env from '../utils/env';
+import { handleRequestFail } from '../utils/sagaUtils';
 
 /**
  * Actions
@@ -185,12 +186,6 @@ export const sagas = {
     yield put(clearAuth());
     yield put(push('/'));
   },
-  handleRequestFail(action: LoginFailAction | LogoutFailAction) {
-    const { res } = action.payload;
-    if (res) {
-      alert(fromJS(res).getIn(['data', 'message'], 'Some error happened.'));
-    }
-  },
 };
 
 export const rootSaga = {
@@ -201,7 +196,7 @@ export const rootSaga = {
     yield takeEvery(LOGIN_SUCCESS, sagas.handleLoginSuccess);
   },
   *loginFail() {
-    yield takeEvery(LOGIN_FAIL, sagas.handleRequestFail);
+    yield takeEvery(LOGIN_FAIL, handleRequestFail);
   },
   *logoutRequest() {
     yield takeEvery(LOGOUT_REQUEST, sagas.handleLogoutRequest);
@@ -212,7 +207,7 @@ export const rootSaga = {
   *logoutFail() {
     yield all([
       takeEvery(LOGOUT_FAIL, sagas.handleLogout),
-      takeEvery(LOGOUT_FAIL, sagas.handleRequestFail),
+      takeEvery(LOGOUT_FAIL, handleRequestFail),
     ]);
   },
 };
