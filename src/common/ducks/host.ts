@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable';
-import env from '../utils/env';
+import { parseHost } from '../utils/hostUtils';
 import { RootState } from '../reducers/index';
 
 /**
@@ -20,7 +20,7 @@ export const setHost = (host: string): HostActions => ({
  */
 const defaultState: HostState = {
   isRootDomain: false,
-  isUserDomain: false,
+  isUserSubdomain: false,
   username: '',
   currentHost: '',
 };
@@ -33,9 +33,9 @@ export const selectors = {
     return fromJS(state.host)
       .get('isRootDomain');
   },
-  getIsUserDomain(state: RootState): boolean {
+  getIsUserSubdomain(state: RootState): boolean {
     return fromJS(state.host)
-      .get('isUserDomain');
+      .get('isUserSubdomain');
   },
   getUsername(state: RootState): string {
     return fromJS(state.host)
@@ -54,17 +54,11 @@ export default (state = defaultState, action: HostActions) => {
   switch (action.type) {
     case SET_HOST: {
       const { host } = action.payload;
-      const parts = host.split('.');
-      const firstPart = parts[0] || '';
-      const isRootDomain = (
-        (env.isStaging && (firstPart === 'stg' || firstPart === 'localhost')) ||
-        (env.isProduction && firstPart === 'cubee')
-      );
-      const isUserDomain = !isRootDomain;
+      const { isRootDomain, isUserSubdomain, username } = parseHost(host);
       return fromJS(state)
         .set('isRootDomain', isRootDomain)
-        .set('isUserDomain', isUserDomain)
-        .set('username', isUserDomain ? firstPart : '')
+        .set('isUserSubdomain', isUserSubdomain)
+        .set('username', username)
         .set('currentHost', host)
         .toJS();
     }
@@ -89,7 +83,7 @@ export type HostActions = (
 
 export type HostState = Readonly<{
   isRootDomain: boolean;
-  isUserDomain: boolean;
+  isUserSubdomain: boolean;
   username: string;
   currentHost: string;
 }>
