@@ -10,7 +10,6 @@ import { push } from 'connected-react-router';
 import { API_HOST } from '../config';
 import apiAgent, { injectCredentials } from '../api/agent';
 import { RootState } from '../reducers/index';
-import { selectors as hostSelectors } from './host';
 import env from '../utils/env';
 
 /**
@@ -104,7 +103,7 @@ export const selectors = {
       .toJS();
   },
   getUsername(state: RootState): string {
-    return this.getUser(state).username;
+    return this.getUser(state).username || '';
   },
   getUsers(state: RootState): UserMap {
     return fromJS(state.auth)
@@ -154,17 +153,11 @@ export const sagas = {
     }
   },
   *handleLoginSuccess(action: LoginSuccessAction) {
-    const isRootDomain = yield select(hostSelectors.getIsRootDomain);
-    const host = yield select(hostSelectors.getHost);
     const { res } = action.payload;
     const { data } = res;
     yield put(setAuth(data.access_token, data.csrf_token, data.user));
     if (env.isBrowser) {
-      if (isRootDomain) {
-        window.location.href = `${window.location.protocol}//${data.user.username}.${host}/posts`;
-      } else {
-        yield put(push('/posts'));
-      }
+      yield put(push(`/${data.user.username}`));
     }
   },
   *handleLogoutRequest() {

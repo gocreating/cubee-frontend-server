@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useParams } from 'react-router';
 import qs from 'query-string';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -9,9 +10,6 @@ import { withLayout } from '../../../layouts/AppLayout';
 import Container from '../../../components/Container';
 import Heading from '../../../components/Heading';
 import {
-  selectors as hostSelectors,
-} from '../../../ducks/host';
-import {
   listUserPostRequest,
   selectors as postSelectors,
   Post,
@@ -20,7 +18,6 @@ import { RootState, RootAction } from '../../../reducers';
 
 const mapStateToProps = (state: RootState) => ({
   location: state.router.location,
-  username: hostSelectors.getUsername(state),
   posts: postSelectors.getUserPostsOfPage(state),
 });
 
@@ -32,8 +29,9 @@ const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreator
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 
 const PostListPage: React.FunctionComponent<Props> = ({
-  location, username, posts, listUserPostRequest,
+  location, posts, listUserPostRequest,
 }) => {
+  const { username } = useParams();
   const query = qs.parse(location.search);
   const page = Number(query.page) || 1;
   const prevPage = Math.max(page - 1, 1);
@@ -64,7 +62,6 @@ const PostListPage: React.FunctionComponent<Props> = ({
 
 PostListPage.propTypes = {
   location: PropTypes.object.isRequired,
-  username: PropTypes.string.isRequired,
   posts: PropTypes.arrayOf(PropTypes.object).isRequired,
   listUserPostRequest: PropTypes.func.isRequired,
 };

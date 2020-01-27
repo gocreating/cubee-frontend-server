@@ -1,14 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import { ThemeProvider } from 'styled-components';
 import { Helmet } from 'react-helmet';
 import LoadingPage from '../../pages/LoadingPage';
 import theme, { ResetStyle, GlobalStyle } from '../../theme';
-import { selectors as hostSelectors } from '../../ducks/host';
-import { RootState } from '../../reducers';
 import './App.css';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,13 +26,7 @@ const UserPostListPage = createLoadable(() => import('../../pages/user/PostListP
 const PostNewPage = createLoadable(() => import('../../pages/user/PostNewPage'));
 const NoMatchPage = createLoadable(() => import('../../pages/NoMatchPage'));
 
-const mapStateToProps = (state: RootState) => ({
-  isUserDomain: hostSelectors.getIsUserDomain(state),
-});
-
-type Props = ReturnType<typeof mapStateToProps>;
-
-const App: React.FunctionComponent<Props> = ({ isUserDomain }) => (
+const App: React.FunctionComponent = () => (
   <ThemeProvider theme={theme}>
     <>
       <Helmet>
@@ -54,20 +44,13 @@ const App: React.FunctionComponent<Props> = ({ isUserDomain }) => (
         <Route exact path="/components" component={ComponentDemoPage} />
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/loading" component={LoadingPage} />
-        {isUserDomain && (
-          <>
-            <Route exact path="/posts" component={UserPostListPage} />
-            <Route exact path="/posts/new" component={PostNewPage} />
-          </>
-        )}
+        <Redirect exact from="/:username" to="/:username/posts" />
+        <Route exact path="/:username/posts" component={UserPostListPage} />
+        <Route exact path="/posts/new" component={PostNewPage} />
         <Route path="*" component={NoMatchPage} />
       </Switch>
     </>
   </ThemeProvider>
 );
 
-App.propTypes = {
-  isUserDomain: PropTypes.bool.isRequired,
-};
-
-export default connect(mapStateToProps)(App);
+export default App;
