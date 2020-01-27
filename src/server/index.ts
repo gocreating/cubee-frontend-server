@@ -3,6 +3,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import config from './config';
 import env from '../common/utils/env';
+import userSubdomainRedirection from './middlewares/userSubdomainRedirection';
 import configureStore from './middlewares/configureStore';
 import syncStoreWithClientSide from './middlewares/syncStoreWithClientSide';
 import getStatus from './middlewares/getStatus';
@@ -10,6 +11,7 @@ import renderMarkup from './middlewares/renderMarkup';
 
 const server = express();
 
+server.use(userSubdomainRedirection);
 server.use(cookieParser());
 
 server.get('/error', () => {

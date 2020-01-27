@@ -30,7 +30,7 @@ const mapStateToProps = (state: RootState) => ({
   isAuth: authSelectors.getIsAuth(state),
   isLoggingOut: authSelectors.getIsLoggingOut(state),
   isRootDomain: hostSelectors.getIsRootDomain(state),
-  isUserDomain: hostSelectors.getIsUserDomain(state),
+  isUserSubdomain: hostSelectors.getIsUserSubdomain(state),
   username: authSelectors.getUsername(state),
   host: hostSelectors.getHost(state),
 });
@@ -94,21 +94,8 @@ const Logo = styled.img`
 `;
 
 const Nav: React.FunctionComponent<Props> = ({
-  isAuth, isLoggingOut, isRootDomain, isUserDomain, username, host, logoutRequest,
+  isAuth, isLoggingOut, isRootDomain, username, logoutRequest,
 }) => {
-  const handleBtnLogoClick = () => {
-    if (isUserDomain) {
-      const parts = host.split('.');
-      parts.shift();
-      const rootHost = parts.join('.');
-      window.location.href = `${window.location.protocol}//${rootHost}`;
-    } else {
-      push('/');
-    }
-  };
-  const handleBtnMySpaceClick = () => {
-    window.location.href = `${window.location.protocol}//${username}.${host}`;
-  };
   const handleBtnLogoutClick = () => {
     logoutRequest();
   };
@@ -117,7 +104,7 @@ const Nav: React.FunctionComponent<Props> = ({
     <StyledNav>
       <Menu>
         <MenuItem>
-          <Link to="#" onClick={handleBtnLogoClick}>
+          <Link to="/">
             <Logo src={logo} />
             Cubee
           </Link>
@@ -139,28 +126,21 @@ const Nav: React.FunctionComponent<Props> = ({
       <Menu pullRight>
         {isAuth && isRootDomain && (
           <MenuItem>
-            <Link to="#" onClick={handleBtnMySpaceClick}>
-              Space
-            </Link>
-          </MenuItem>
-        )}
-        {isAuth && isUserDomain && (
-          <MenuItem>
             <Link to="/posts/new">
               <AddIcon size={24} />
               New Post
             </Link>
           </MenuItem>
         )}
-        {isUserDomain && (
+        {isAuth && isRootDomain && (
           <MenuItem>
-            <Link to="/posts">
+            <Link to={`/${username}/posts`}>
               <ArticleIcon size={22} />
               Posts
             </Link>
           </MenuItem>
         )}
-        {!isAuth && (
+        {!isAuth && isRootDomain && (
           <MenuItem>
             <Link to="/login">
               <UserIcon size={20} />
@@ -168,7 +148,7 @@ const Nav: React.FunctionComponent<Props> = ({
             </Link>
           </MenuItem>
         )}
-        {isAuth && (
+        {isAuth && isRootDomain && (
           <MenuItem>
             <Link to="#" onClick={handleBtnLogoutClick}>
               <UserIcon size={20} />
@@ -186,7 +166,7 @@ Nav.propTypes = {
   isLoggingOut: PropTypes.bool.isRequired,
   isAuth: PropTypes.bool.isRequired,
   isRootDomain: PropTypes.bool.isRequired,
-  isUserDomain: PropTypes.bool.isRequired,
+  isUserSubdomain: PropTypes.bool.isRequired,
   username: PropTypes.string.isRequired,
   host: PropTypes.string.isRequired,
   logoutRequest: PropTypes.func.isRequired,
