@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Nav from './Nav';
+import Messages from './Messages';
 
 interface Props {
   nav?: boolean;
@@ -9,6 +10,7 @@ interface Props {
 
 const AppLayout: React.FunctionComponent<Props> = ({ nav, children }) => (
   <>
+    <Messages />
     {nav && <Nav />}
     {children}
   </>
