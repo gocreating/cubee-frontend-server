@@ -4,6 +4,7 @@ import { connectRouter, RouterState } from 'connected-react-router';
 import env from '../utils/env';
 import authReducer, { AuthActions, AuthState } from '../ducks/auth';
 import hostReducer, { HostActions, HostState } from '../ducks/host';
+import messageReducer, { MessageActions, MessageState } from '../ducks/message';
 import postReducer, { PostActions, PostState } from '../ducks/post';
 import statusReducer, { StatusActions, StatusState } from '../ducks/status';
 
@@ -27,6 +28,7 @@ const createRootReducer = (history: History): Reducer => combineReducers({
   router: connectRouter(history),
   auth,
   host: hostReducer,
+  message: messageReducer,
   post: postReducer,
   status: statusReducer,
 });
@@ -35,6 +37,7 @@ export interface RootState {
   router: RouterState;
   auth: AuthState;
   host: HostState;
+  message: MessageState;
   post: PostState;
   status: StatusState;
 }
@@ -42,6 +45,7 @@ export interface RootState {
 export type RootAction = (
   AuthActions |
   HostActions |
+  MessageActions |
   PostActions |
   StatusActions
 );

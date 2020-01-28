@@ -50,6 +50,7 @@
     "@styled-icons/material": "^9.2.0",
     "@styled-icons/remix-line": "^9.2.0",
     "@styled-system/theme-get": "^5.1.1",
+    "@types/shortid": "^0.0.29",
     "babel-loader": "^8.0.4",
     "connected-react-router": "^6.6.1",
     "cookie-parser": "^1.4.4",
@@ -72,6 +73,7 @@
     "redux-persist": "5",
     "redux-saga": "^1.0.5",
     "serialize-javascript": "^2.1.1",
+    "shortid": "^2.2.15",
     "styled-components": "^4.3.2",
     "styled-system": "^5.1.1"
   },
