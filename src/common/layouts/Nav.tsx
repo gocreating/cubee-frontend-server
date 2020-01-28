@@ -35,7 +35,8 @@ const mapStateToProps = (state: RootState) => ({
   host: hostSelectors.getHost(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreators({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreators<any, any>({
   logoutRequest,
   push,
 }, dispatch);
