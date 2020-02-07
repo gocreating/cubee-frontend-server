@@ -9,6 +9,8 @@ import Heading from '../../../components/Heading';
 import Form from '../../../components/Form';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
+import CubeeEditor from '../../../components/CubeeEditor';
+import EditorProvider from '../../../components/CubeeEditor/lib/components/EditorProvider';
 import {
   createPostRequest,
 } from '../../../ducks/post';
@@ -65,6 +67,9 @@ const PostNewPage: React.FunctionComponent<Props> = ({
           Create
         </Button>
       </Form>
+      <EditorProvider>
+        <CubeeEditor />
+      </EditorProvider>
     </Container>
   );
 };

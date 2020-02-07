@@ -1,0 +1,4 @@
+export default {
+  SOURCE_VIEW: 'SOURCE_VIEW',
+  INSERTED_VIEW: 'INSERTED_VIEW',
+}

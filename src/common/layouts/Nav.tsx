@@ -125,6 +125,15 @@ const Nav: React.FunctionComponent<Props> = ({
         </MenuItem>
       </Menu>
       <Menu pullRight>
+        {/*<MenuItem>
+          <a href="http://localhost.stg.cubee.cc:3000/">root</a>
+        </MenuItem>
+        <MenuItem>
+          <a href="http://gocreating.localhost.stg.cubee.cc:3000/">gocreating</a>
+        </MenuItem>
+        <MenuItem>
+          <a href="http://gocreating2.localhost.stg.cubee.cc:3000/">gocreating2</a>
+        </MenuItem>*/}
         {isAuth && isRootDomain && (
           <MenuItem>
             <Link to="/posts/new">
