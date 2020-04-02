@@ -1,0 +1,4 @@
+export default {
+  NESTED_SORTABLE: 'NESTED_SORTABLE',
+  INSERTABLE: 'INSERTABLE',
+}

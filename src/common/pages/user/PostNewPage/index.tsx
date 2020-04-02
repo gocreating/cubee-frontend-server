@@ -1,5 +1,7 @@
-import React, { useRef } from 'react';
+import shortid from 'shortid';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
@@ -9,8 +11,8 @@ import Heading from '../../../components/Heading';
 import Form from '../../../components/Form';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
-import CubeeEditor from '../../../components/CubeeEditor';
-import EditorProvider from '../../../components/CubeeEditor/lib/components/EditorProvider';
+import { Editor } from '../../../../cubee-wysiwyg';
+import { Content } from '../../../../cubee-wysiwyg/types';
 import {
   createPostRequest,
 } from '../../../ducks/post';
@@ -25,14 +27,45 @@ const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => bindActionCreator
 
 type Props = ReturnType<typeof mapDispatchToProps>;
 
+const initialContent = {
+  id: shortid.generate(),
+  type: 'cubee/LINEAR_LAYOUT',
+  props: {
+    orientation: 'vertical',
+  },
+  children: [
+    {
+      id: shortid.generate(),
+      type: 'cubee/TEXT_VIEW',
+      props: {
+        value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
+      },
+    },
+    {
+      id: shortid.generate(),
+      type: 'cubee/TEXT_VIEW',
+      props: {
+        value: 'text 2',
+      },
+    },
+  ],
+};
+
+const StyledEditor = styled(Editor)`
+  border: 1px solid #000;
+`;
+
 const PostNewPage: React.FunctionComponent<Props> = ({
   createPostRequest,
 }) => {
   const refTitle = useRef<HTMLInputElement>(null);
-  const refBody = useRef<HTMLInputElement>(null);
+  const [editorContent, setEditorContent] = useState<Content>(initialContent);
+  const handleEditorContentChange = (content: Content) => {
+    setEditorContent(content);
+  };
   const handleBtnCreateClick = () => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    createPostRequest(refTitle.current!.value, { test: refBody.current!.value });
+    console.log(editorContent);
+    // createPostRequest(refTitle.current!.value, editorContent);
   };
 
   return (
@@ -43,7 +76,6 @@ const PostNewPage: React.FunctionComponent<Props> = ({
       <Heading level={2}>Create New Post</Heading>
       <Form>
         <Form.Field>
-          <label htmlFor="post-title">Title</label>
           <Input
             ref={refTitle}
             id="post-title"
@@ -52,11 +84,9 @@ const PostNewPage: React.FunctionComponent<Props> = ({
           />
         </Form.Field>
         <Form.Field>
-          <label htmlFor="post-body">Body</label>
-          <Input
-            ref={refBody}
-            id="post-body"
-            type="text"
+          <StyledEditor
+            content={editorContent}
+            onContentChange={handleEditorContentChange}
           />
         </Form.Field>
         <Button
@@ -67,9 +97,6 @@ const PostNewPage: React.FunctionComponent<Props> = ({
           Create
         </Button>
       </Form>
-      <EditorProvider>
-        <CubeeEditor />
-      </EditorProvider>
     </Container>
   );
 };
