@@ -36,16 +36,23 @@ const initialContent = {
   children: [
     {
       id: shortid.generate(),
-      type: 'cubee/TEXT_VIEW',
+      type: 'cubee/MARKDOWN_VIEW',
       props: {
-        value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
+        value: 'Lorem Ipsum is.\ndf g dfg sdfg sdf g',
       },
     },
     {
       id: shortid.generate(),
-      type: 'cubee/TEXT_VIEW',
+      type: 'cubee/MARKDOWN_VIEW',
       props: {
         value: 'text 2',
+      },
+    },
+    {
+      id: shortid.generate(),
+      type: 'cubee/MARKDOWN_VIEW',
+      props: {
+        value: '## title 1\n\ntext paragraph',
       },
     },
   ],
@@ -73,7 +80,6 @@ const PostNewPage: React.FunctionComponent<Props> = ({
       <Helmet>
         <title>Create New Post</title>
       </Helmet>
-      <Heading level={2}>Create New Post</Heading>
       <Form>
         <Form.Field>
           <Input

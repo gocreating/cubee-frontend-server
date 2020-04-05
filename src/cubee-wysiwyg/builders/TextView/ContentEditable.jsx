@@ -2,18 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class ContentEditable extends React.Component {
-  constructor() {
-    super();
-    this.divRef = React.createRef();
-  }
-
   shouldComponentUpdate(nextProps) {
-    return nextProps.html !== this.divRef.current.innerHTML;
+    const { innerRef } = this.props;
+    return nextProps.html !== innerRef.current.innerHTML;
   }
 
   emitChange = () => {
-    const { onChange } = this.props;
-    const html = this.divRef.current.innerHTML;
+    const { innerRef, onChange } = this.props;
+    const html = innerRef.current.innerHTML;
     if (onChange && html !== this.lastHtml) {
       onChange({
         target: {
@@ -25,11 +21,11 @@ class ContentEditable extends React.Component {
   }
 
   render() {
-    const { html, onChange, ...rest } = this.props;
+    const { innerRef, html, onChange, ...rest } = this.props;
 
     return (
       <div
-        ref={this.divRef}
+        ref={innerRef}
         onInput={this.emitChange}
         onBlur={this.emitChange}
         contentEditable
@@ -41,6 +37,7 @@ class ContentEditable extends React.Component {
 }
 
 ContentEditable.propTypes = {
+  innerRef: PropTypes.object,
   html: PropTypes.string,
   onChange: PropTypes.func,
 };

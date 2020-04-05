@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 
 const Container = styled.div`
+  z-index: 999;
   ${props => props.orientation === 'horizontal' ? css`
     display: flex;
     align-items: stretch;

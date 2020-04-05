@@ -4,7 +4,7 @@ import MultiBackend from 'react-dnd-multi-backend/dist/cjs/index';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch';
 import { DndProvider } from 'react-dnd';
 import LinearLayout from '../builders/LinearLayout';
-import TextView from '../builders/TextView';
+import MarkdownView from '../builders/MarkdownView';
 import EditorContext from '../EditorContext';
 import ContentBuilder from './ContentBuilder';
 
@@ -20,10 +20,12 @@ class Editor extends React.Component {
             onRootContentChange: onContentChange,
             builderComponentMap: {
               'cubee/LINEAR_LAYOUT': LinearLayout,
-              'cubee/TEXT_VIEW': TextView,
+              'cubee/MARKDOWN_VIEW': MarkdownView,
             },
+            refMap: {},
           }}
         >
+          {/* This div is for custom styling from outside */}
           <div {...rest}>
             <ContentBuilder content={content} />
           </div>

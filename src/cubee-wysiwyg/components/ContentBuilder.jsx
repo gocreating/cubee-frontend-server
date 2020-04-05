@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import useEditor from '../useEditor';
 
@@ -6,10 +6,17 @@ const ContentBuilder = ({ content }) => {
   if (!content) {
     return null;
   }
-  const { builderComponentMap } = useEditor();
+  const { builderComponentMap, refMap } = useEditor();
   const BuilderComponent = builderComponentMap[content.type];
   if (BuilderComponent) {
-    return <BuilderComponent content={content} />;
+    const ref = useRef(null);
+    refMap[content.id] = ref;
+    return (
+      <BuilderComponent
+        ref={ref}
+        content={content}
+      />
+    );
   }
   return (
     <div>

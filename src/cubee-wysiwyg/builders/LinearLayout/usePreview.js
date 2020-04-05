@@ -14,13 +14,18 @@ export default (scopeId, contents) => {
     return injectedContents;
   }, [state.previewIndex, contents]);
   const startPreview = (previewIndex) => {
-    setState({
-      isPreviewing: true,
-      previewIndex: previewIndex || state.previewIndex,
-    });
+    if (previewIndex !== state.previewIndex || state.isPreviewing !== true) {
+      setState({
+        isPreviewing: true,
+        previewIndex,
+      });
+    }
   };
   const stopPreview = () => {
-    setState({ isPreviewing: false });
+    setState({
+      isPreviewing: false,
+      previewIndex: contents.length,
+    });
   };
   return {
     injectedContents: getInjectedContents(),

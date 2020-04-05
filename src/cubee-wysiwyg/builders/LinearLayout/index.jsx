@@ -16,7 +16,7 @@ const Container = styled.div`
   `}
 `;
 
-const LinearLayout = ({ content }) => {
+const LinearLayout = React.forwardRef(({ content }, ref) => {
   const { id, props, children } = content;
   // eslint-disable-next-line react/prop-types
   const { orientation } = props;
@@ -29,12 +29,23 @@ const LinearLayout = ({ content }) => {
     stopPreview,
   } = usePreview(id, children || []);
 
+  const indexOfId = (id) => children.findIndex(childContent => childContent.id === id);
+
   return (
-    <Container orientation={orientation}>
+    <Container ref={ref} orientation={orientation}>
       {injectedContents.map((childContent, index) => {
         if (index !== previewIndex) {
           return (
-            <DndItem key={childContent.id}>
+            <DndItem
+              key={childContent.id}
+              content={childContent}
+              orientation={orientation}
+              previewIndex={previewIndex}
+              index={index}
+              startPreview={startPreview}
+              stopPreview={stopPreview}
+              indexOfId={indexOfId}
+            >
               <ContentBuilder content={childContent} />
             </DndItem>
           );
@@ -49,7 +60,7 @@ const LinearLayout = ({ content }) => {
       })}
     </Container>
   )
-};
+});
 
 LinearLayout.propTypes = {
   content: PropTypes.object,
