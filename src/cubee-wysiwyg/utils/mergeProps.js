@@ -10,7 +10,7 @@ const mergeProps = (content, findId, props) => {
   }
   return {
     ...content,
-    children: (content.children || []).map(childContent => mergeProps(childContent, findId, props)),
+    children: content.children && content.children.map(childContent => mergeProps(childContent, findId, props)),
   };
 };
 
