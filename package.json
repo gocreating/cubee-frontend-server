@@ -55,7 +55,7 @@
     "connected-react-router": "^6.6.1",
     "cookie-parser": "^1.4.4",
     "cross-fetch": "^3.0.4",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "immutable": "^4.0.0-rc.12",
     "jwt-decode": "^2.2.0",
     "prop-types": "^15.7.2",
